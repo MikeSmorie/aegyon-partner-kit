@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SalesForce — Aegyon Field Brief</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#0F2744;--primary-light:#1B3A67;--accent:#00CFDE;--accent-dark:#00A8B8;--success:#2ECC8F;--warning:#FFB547;--critical:#FF4D6A;--light-bg:#F4F6F9;--border:#DDE3ED;--text-dark:#1a2233;--text-light:#5a6a82;--text-muted:#8899aa}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"DM Sans",system-ui,sans-serif;background:#F4F6F9;color:var(--text-dark);min-height:100vh}
+.site-header{background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);padding:36px 48px;color:#fff}
+.header-inner{max-width:1200px;margin:0 auto}
+.header-h1{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:38px;letter-spacing:0.01em;line-height:1.1}
+.header-sub{font-size:14px;opacity:0.65;margin-top:6px;letter-spacing:0.04em;text-transform:uppercase}
+.header-meta{display:flex;gap:32px;margin-top:20px;font-size:12px;opacity:0.55;letter-spacing:0.05em;text-transform:uppercase}
+.nav-bar{position:sticky;top:0;z-index:50;background:#fff;border-bottom:2px solid var(--border);padding:0 48px;display:flex;gap:0;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.nav-btn{padding:14px 20px;font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;border:none;background:transparent;cursor:pointer;color:var(--text-light);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.15s;font-family:"DM Sans",sans-serif}
+.nav-btn:hover{color:var(--primary)}
+.nav-btn.active{color:var(--primary);border-bottom-color:var(--accent)}
+.content-section{display:none;padding:48px;max-width:1200px;margin:0 auto}
+.content-section.active{display:block}
+.section-title{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:28px;color:var(--primary);letter-spacing:0.02em;margin-bottom:24px}
+.sub-heading{font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.section-gap{height:32px}
+.exec-summary{font-size:15px;line-height:1.85;color:var(--text-light);white-space:pre-wrap;background:#fff;border-radius:8px;padding:28px;border:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,0.04)}
+.domain-card{background:#fff;border-radius:8px;border:1px solid var(--border);border-left:4px solid var(--accent);padding:20px 24px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.domain-header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:10px}
+.domain-title{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:20px;color:var(--primary);letter-spacing:0.02em}
+.domain-desc{font-size:13px;color:var(--text-light);margin-top:4px;line-height:1.6}
+.domain-badge{font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+.kpi-trigger{font-size:12px;font-family:"JetBrains Mono",monospace;color:var(--text-muted);background:var(--light-bg);border-radius:4px;padding:8px 12px;border-left:2px solid var(--accent)}
+.kpi-label{font-weight:600;color:var(--accent-dark)}
+.scenario-block{background:#fff;border-radius:8px;border:1px solid var(--border);padding:20px 24px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.scenario-header{display:flex;gap:16px;align-items:flex-start;margin-bottom:14px}
+.scenario-num{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:28px;color:var(--border);line-height:1;flex-shrink:0}
+.scenario-title{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:20px;color:var(--primary);letter-spacing:0.02em;margin-bottom:4px}
+.scenario-meta{font-size:12px;color:var(--text-muted)}
+.scenario-row{display:grid;grid-template-columns:80px 1fr;gap:8px;padding:6px 0;border-top:1px solid #f0f2f5;font-size:13px;line-height:1.6}
+.srow-label{font-weight:600;color:var(--text-muted);font-size:11px;letter-spacing:0.04em;text-transform:uppercase;padding-top:2px}
+.srow-val{color:var(--text-light)}
+.pill{display:inline-block;font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:2px 8px;border-radius:4px}
+.pill-green{background:rgba(46,204,143,0.12);color:#1a7a55}
+.pill-amber{background:rgba(255,181,71,0.15);color:#92400e}
+.pill-red{background:rgba(255,77,106,0.12);color:#991b1b}
+.rag-table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.06);font-size:13px}
+.rag-table thead tr{background:var(--primary);color:#fff}
+.rag-table th{padding:12px 16px;text-align:left;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600}
+.rag-table td{padding:12px 16px;border-bottom:1px solid #f0f2f5;color:var(--text-light)}
+.rag-table tr.row-tint td{background:rgba(0,207,222,0.02)}
+.rag-table tr:hover td{background:rgba(0,207,222,0.04)}
+.threshold-cell{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--text-muted)}
+.bands-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.band-card{background:#fff;border-radius:8px;border:1px solid var(--border);padding:16px 20px;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.band-kpi{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:16px;color:var(--primary);letter-spacing:0.02em;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.band-row{display:flex;justify-content:space-between;padding:5px 0;font-size:12px}
+.band-label{font-weight:700;letter-spacing:0.04em;text-transform:uppercase}
+.band-val{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--text-muted);text-align:right}
+.green-row .band-label{color:#1a7a55}
+.amber-row .band-label{color:#92400e}
+.red-row .band-label{color:#991b1b}
+.doctrine-block{background:#fff;border-radius:8px;border:1px solid var(--border);border-left:4px solid var(--primary-light);padding:20px 24px;font-size:14px;line-height:1.8;color:var(--text-light);white-space:pre-wrap;margin-top:8px}
+.checklist-cat{margin-bottom:24px}
+.checklist-cat-label{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:16px;color:var(--primary);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
+.checklist-item{display:flex;align-items:flex-start;gap:12px;padding:10px 14px;border-radius:6px;cursor:pointer;transition:background 0.1s;margin-bottom:4px;background:#fff;border:1px solid var(--border)}
+.checklist-item:hover{background:rgba(0,207,222,0.03)}
+.checklist-item.checked{background:rgba(46,204,143,0.06);border-color:rgba(46,204,143,0.2)}
+.checklist-item.checked .check-text{text-decoration:line-through;color:var(--text-muted)}
+.checkbox{width:19px;height:19px;border-radius:3px;border:2px solid var(--primary);flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all 0.15s}
+.checklist-item.checked .checkbox{background:var(--accent);border-color:var(--accent)}
+.checklist-item.checked .checkbox::after{content:"✓";color:#fff;font-size:12px;font-weight:700}
+.check-text{font-size:13px;line-height:1.6;color:var(--text-light)}
+.gap-block{background:#fff;border-radius:8px;border:1px solid var(--border);border-left:4px solid var(--warning);padding:16px 20px;margin-bottom:12px}
+.gap-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.gap-text{font-size:13px;line-height:1.6;color:var(--text-light);flex:1}
+.gap-meta{display:flex;align-items:center;gap:8px;flex-shrink:0;font-size:11px}
+.gap-horizon{color:var(--text-muted);font-style:italic}
+.empty-state{color:var(--text-muted);font-size:13px;font-style:italic;padding:16px}
+.site-footer{text-align:center;padding:40px 24px;color:var(--text-muted);font-size:11px;letter-spacing:0.04em;border-top:1px solid var(--border);margin-top:48px}
+.site-footer strong{color:var(--primary);letter-spacing:0.08em}
+</style>
+</head>
+<body>
+<div class="site-header">
+  <div class="header-inner">
+    <div class="header-h1">SalesForce</div>
+    <div class="header-sub">Strategic Stress Dossier — Aegyon Field Brief</div>
+    <div class="header-meta">
+      <span>Date: 2026-04-19</span>
+      <span>Mode: Strategic Stress Assessment</span>
+      <span>Sector: Enterprise SaaS / CRM</span>
+      
+      <span>Analyst: Aegyon</span>
+    </div>
+  </div>
+</div>
+
+<nav class="nav-bar">
+  <button class="nav-btn active" onclick="sw('overview',this)">Overview</button>
+  <button class="nav-btn" onclick="sw('domains',this)">Structural Domains</button>
+  <button class="nav-btn" onclick="sw('scenarios',this)">Stress Scenarios</button>
+  <button class="nav-btn" onclick="sw('governance',this)">Governance Architecture</button>
+  <button class="nav-btn" onclick="sw('checklist',this)">Execution Checklist</button>
+  <button class="nav-btn" onclick="sw('gaps',this)">Data Gaps</button>
+</nav>
+
+<div id="overview" class="content-section active">
+  <div class="section-title">Overview</div>
+  <div class="exec-summary">The primary structural threat to Salesforce, Inc. is AI-driven procurement transparency combined with generative AI workflow substitution, operating under conditions of enterprise budget compression and SaaS valuation multiple contraction. This dual-axis force accelerates customer leverage while simultaneously enabling lower-cost substitutes, compressing both pricing power and differentiation velocity faster than the organization can adapt through product evolution alone. This threat operates on a 12–24 month decision horizon and does not require competitor superiority — only cost-reduction pressure at the procurement layer and sufficiently capable AI tooling to replicate core CRM workflows at materially lower total cost of ownership.
+
+Salesforce operates as a public company (NYSE: CRM) under a Software-as-a-Service business model with reported multi-billion dollar revenue scale. However, the intake analysis contains no unit economics (Customer Acquisition Cost, Lifetime Value, Net Revenue Retention), no customer concentration data, no contract duration distribution, and no margin structure visibility. This creates a data sufficiency crisis where the organization's economic engine cannot be stress-tested against the identified structural threats. The core survival hinge is revenue retention at sufficient velocity to sustain operating expense base while maintaining access to capital markets at non-distressed valuations. This hinge depends on four variables not quantified in intake materials: gross retention rate, net retention rate, operating expense flexibility, and balance sheet strength.</div>
+</div>
+
+<div id="domains" class="content-section">
+  <div class="section-title">Structural Domains</div>
+  
+    <div class="domain-card" style="border-left-color:#FF4D6A">
+      <div class="domain-header">
+        <div>
+          <div class="domain-title">AI Procurement Leverage</div>
+          <div class="domain-desc">AI-powered procurement benchmarking tools enable enterprise buyers to conduct real-time price and feature comparisons across SaaS vendors, reducing information asymmetry and increasing churn risk during renewal cycles. This force operates independent of product quality and affects all SaaS vendors simultaneously, but impacts high-price-point providers disproportionately.</div>
+        </div>
+        <span class="domain-badge" style="background:#FF4D6A20;color:#FF4D6A">Critical</span>
+      </div>
+      <div class="kpi-trigger"><span class="kpi-label">KPI Trigger:</span> Price differentials exceeding 20-30% between comparable solutions</div>
+    </div>
+
+    <div class="domain-card" style="border-left-color:#FF4D6A">
+      <div class="domain-header">
+        <div>
+          <div class="domain-title">Generative AI Workflow Replication</div>
+          <div class="domain-desc">Large language models combined with low-code automation platforms enable internal IT teams or smaller competitors to replicate CRM workflow functionality at fraction of incumbent cost, compressing switching friction and product differentiation simultaneously. This force does not require superior technology — only sufficient capability at materially lower cost.</div>
+        </div>
+        <span class="domain-badge" style="background:#FF4D6A20;color:#FF4D6A">Critical</span>
+      </div>
+      <div class="kpi-trigger"><span class="kpi-label">KPI Trigger:</span> Sufficient AI capability at materially lower total cost of ownership</div>
+    </div>
+
+    <div class="domain-card" style="border-left-color:#FF4D6A">
+      <div class="domain-header">
+        <div>
+          <div class="domain-title">Financial Transparency Paradox</div>
+          <div class="domain-desc">Salesforce operates as a public company (NYSE: CRM) with full SEC filing obligations, yet the intake analysis contains zero balance sheet, cash flow, or debt structure data. This creates a critical analytical gap where financial resilience under margin compression cannot be modeled despite data availability.</div>
+        </div>
+        <span class="domain-badge" style="background:#FF4D6A20;color:#FF4D6A">Critical</span>
+      </div>
+      <div class="kpi-trigger"><span class="kpi-label">KPI Trigger:</span> Zero financial data despite public company SEC filing requirements</div>
+    </div>
+
+    <div class="domain-card" style="border-left-color:#FF4D6A">
+      <div class="domain-header">
+        <div>
+          <div class="domain-title">Unit Economics Opacity</div>
+          <div class="domain-desc">CAC, LTV, NRR, and payback period are entirely unknown despite SaaS business model confirmation. Without these variables, revenue predictability and growth sustainability cannot be stress-tested under macro tightening.</div>
+        </div>
+        <span class="domain-badge" style="background:#FF4D6A20;color:#FF4D6A">Critical</span>
+      </div>
+      <div class="kpi-trigger"><span class="kpi-label">KPI Trigger:</span> Net Revenue Retention threshold unknown; typical SaaS stress point at &lt;100% NRR</div>
+    </div>
+
+    <div class="domain-card" style="border-left-color:#FFB547">
+      <div class="domain-header">
+        <div>
+          <div class="domain-title">Customer Concentration Risk</div>
+          <div class="domain-desc">Customer concentration, contract duration mix, and vertical distribution are unknown. Revenue volatility and churn risk under enterprise budget cuts are therefore unquantifiable.</div>
+        </div>
+        <span class="domain-badge" style="background:#FFB54720;color:#FFB547">Warning</span>
+      </div>
+      <div class="kpi-trigger"><span class="kpi-label">KPI Trigger:</span> Top 10 or top 20 customer revenue concentration unknown</div>
+    </div>
+
+    <div class="domain-card" style="border-left-color:#FFB547">
+      <div class="domain-header">
+        <div>
+          <div class="domain-title">Competitive Field Opacity</div>
+          <div class="domain-desc">Named competitors and competitive positioning are entirely absent from intake. Competitive displacement velocity under AI acceleration cannot be mapped without competitive field architecture.</div>
+        </div>
+        <span class="domain-badge" style="background:#FFB54720;color:#FFB547">Warning</span>
+      </div>
+      <div class="kpi-trigger"><span class="kpi-label">KPI Trigger:</span> Zero named competitors identified</div>
+    </div>
+
+    <div class="domain-card" style="border-left-color:#FFB547">
+      <div class="domain-header">
+        <div>
+          <div class="domain-title">Technology Stack Architecture</div>
+          <div class="domain-desc">Technology stack architecture and AI integration depth are unknown. Organizational capacity to respond to AI-native competitive threats cannot be assessed.</div>
+        </div>
+        <span class="domain-badge" style="background:#FFB54720;color:#FFB547">Warning</span>
+      </div>
+      <div class="kpi-trigger"><span class="kpi-label">KPI Trigger:</span> AI integration depth and proprietary data moat strength unknown</div>
+    </div>
+
+    <div class="domain-card" style="border-left-color:#00CFDE">
+      <div class="domain-header">
+        <div>
+          <div class="domain-title">Regulatory Compliance Exposure</div>
+          <div class="domain-desc">Regulatory exposure (data privacy, financial services, healthcare compliance) is unknown. Compliance cost inflation and regulatory disruption risk are unquantifiable. California TFAIA effective January 1, 2026 and Colorado ADA effective June 30, 2026 impose mandatory impact assessments and bias audits.</div>
+        </div>
+        <span class="domain-badge" style="background:#00CFDE20;color:#00CFDE">Monitored</span>
+      </div>
+      <div class="kpi-trigger"><span class="kpi-label">KPI Trigger:</span> California TFAIA effective January 1, 2026; Colorado ADA effective June 30, 2026</div>
+    </div>
+
+    <div class="domain-card" style="border-left-color:#FFB547">
+      <div class="domain-header">
+        <div>
+          <div class="domain-title">Enterprise Budget Compression</div>
+          <div class="domain-desc">Enterprise buyers face quarterly decision compression points where renewal decisions concentrate. When macro conditions tighten and CFOs impose budget cuts, discretionary software spending contracts first, followed by efficiency-justified spending, and finally mission-critical infrastructure spending.</div>
+        </div>
+        <span class="domain-badge" style="background:#FFB54720;color:#FFB547">Warning</span>
+      </div>
+      <div class="kpi-trigger"><span class="kpi-label">KPI Trigger:</span> Q4 and Q1 renewal concentration periods under budget tightening</div>
+    </div>
+
+    <div class="domain-card" style="border-left-color:#FFB547">
+      <div class="domain-header">
+        <div>
+          <div class="domain-title">SaaS Valuation Multiple Contraction</div>
+          <div class="domain-desc">Public market valuations compressed from peak multiples (15–20x forward revenue) to discipline multiples (4–8x forward revenue for profitable companies, 2–4x for unprofitable companies). This compression reduced access to growth capital and increased pressure to demonstrate path to profitability within 12–18 months.</div>
+        </div>
+        <span class="domain-badge" style="background:#FFB54720;color:#FFB547">Warning</span>
+      </div>
+      <div class="kpi-trigger"><span class="kpi-label">KPI Trigger:</span> Forward revenue multiples compressed to 4-8x for profitable, 2-4x for unprofitable companies</div>
+    </div>
+</div>
+
+<div id="scenarios" class="content-section">
+  <div class="section-title">Stress Scenarios</div>
+  
+    <div class="scenario-block">
+      <div class="scenario-header">
+        <div class="scenario-num">01</div>
+        <div class="scenario-main">
+          <div class="scenario-title">AI Procurement Transparency Acceleration</div>
+          <div class="scenario-meta"><span class="pill pill-red">High</span> probability</div>
+        </div>
+      </div>
+      <div class="scenario-row"><span class="srow-label">Trigger:</span><span class="srow-val">Enterprise buyers adopt AI-powered procurement tools providing real-time competitive benchmarking during renewal cycles</span></div>
+      <div class="scenario-row"><span class="srow-label">Impact:</span><span class="srow-val">Incumbent advantage erodes; churn risk increases materially when price differentials exceed 20-30%; renewal pricing power compresses across customer base within 12-24 months</span></div>
+      <div class="scenario-row"><span class="srow-label">Response:</span><span class="srow-val">Quantify current price positioning versus competitors; model retention sensitivity to price concessions; accelerate value demonstration and ROI velocity metrics; strengthen switching friction through deeper integration complexity</span></div>
+    </div>
+
+    <div class="scenario-block">
+      <div class="scenario-header">
+        <div class="scenario-num">02</div>
+        <div class="scenario-main">
+          <div class="scenario-title">Generative AI Workflow Substitution</div>
+          <div class="scenario-meta"><span class="pill pill-amber">Medium</span> probability</div>
+        </div>
+      </div>
+      <div class="scenario-row"><span class="srow-label">Trigger:</span><span class="srow-val">Low-code platforms combined with LLMs enable internal IT teams or smaller competitors to replicate core CRM workflows at materially lower TCO</span></div>
+      <div class="scenario-row"><span class="srow-label">Impact:</span><span class="srow-val">Product differentiation velocity compresses; switching costs decline; displacement pressure accelerates independent of competitive product superiority</span></div>
+      <div class="scenario-row"><span class="srow-label">Response:</span><span class="srow-val">Map proprietary data moats and workflow embeddedness depth; accelerate AI integration to maintain capability gap; quantify and communicate switching friction through customer exit analysis</span></div>
+    </div>
+
+    <div class="scenario-block">
+      <div class="scenario-header">
+        <div class="scenario-num">03</div>
+        <div class="scenario-main">
+          <div class="scenario-title">Enterprise Budget Compression Cascade</div>
+          <div class="scenario-meta"><span class="pill pill-amber">Medium</span> probability</div>
+        </div>
+      </div>
+      <div class="scenario-row"><span class="srow-label">Trigger:</span><span class="srow-val">Macro tightening forces CFOs to impose budget cuts; discretionary software spending contracts first</span></div>
+      <div class="scenario-row"><span class="srow-label">Impact:</span><span class="srow-val">Q4 and Q1 renewal churn accelerates; net revenue retention declines below 100%; margin compression velocity exceeds cost reduction capacity if operating leverage is high</span></div>
+      <div class="scenario-row"><span class="srow-label">Response:</span><span class="srow-val">Reclassify CRM platform from discretionary to mission-critical through outcome-based ROI demonstration; model margin compression scenarios; prepare operating expense flex capacity</span></div>
+    </div>
+
+    <div class="scenario-block">
+      <div class="scenario-header">
+        <div class="scenario-num">04</div>
+        <div class="scenario-main">
+          <div class="scenario-title">Capital Market Access Deterioration</div>
+          <div class="scenario-meta"><span class="pill pill-green">Low</span> probability</div>
+        </div>
+      </div>
+      <div class="scenario-row"><span class="srow-label">Trigger:</span><span class="srow-val">Revenue growth decelerates while profitability deteriorates; valuation multiples compress to distressed levels</span></div>
+      <div class="scenario-row"><span class="srow-label">Impact:</span><span class="srow-val">Access to debt and equity markets at non-distressed valuations becomes constrained; refinancing risk increases if near-term debt maturities exist; forced cost restructuring or asset sales</span></div>
+      <div class="scenario-row"><span class="srow-label">Response:</span><span class="srow-val">Obtain immediate balance sheet visibility (cash reserves, debt structure, debt maturity schedule); model liquidity runway under revenue deceleration scenarios; ensure 24+ months cash runway</span></div>
+    </div>
+
+    <div class="scenario-block">
+      <div class="scenario-header">
+        <div class="scenario-num">05</div>
+        <div class="scenario-main">
+          <div class="scenario-title">Regulatory Compliance Cost Inflation</div>
+          <div class="scenario-meta"><span class="pill pill-amber">Medium</span> probability</div>
+        </div>
+      </div>
+      <div class="scenario-row"><span class="srow-label">Trigger:</span><span class="srow-val">California TFAIA (effective Jan 1, 2026) and Colorado ADA (effective June 30, 2026) impose mandatory AI impact assessments, bias audits, and human review requirements</span></div>
+      <div class="scenario-row"><span class="srow-label">Impact:</span><span class="srow-val">Fixed compliance costs increase independent of revenue performance; margin compression accelerates if deployed in high-risk workflows (employment, credit, housing, insurance, criminal justice)</span></div>
+      <div class="scenario-row"><span class="srow-label">Response:</span><span class="srow-val">Map AI feature deployment footprint against high-risk workflow categories; quantify compliance cost increase under new regulations; build compliance cost into forward pricing models</span></div>
+    </div>
+</div>
+
+<div id="governance" class="content-section">
+  <div class="section-title">Governance Architecture</div>
+  <h3 class="sub-heading">RAG Control Table</h3>
+  
+    <table class="rag-table">
+      <thead><tr><th>Control</th><th>Owner</th><th>Status</th><th>Threshold</th></tr></thead>
+      <tbody>
+        
+        <tr class="">
+          <td>Net Revenue Retention Monitoring</td>
+          <td>CFO / Chief Revenue Officer</td>
+          <td><span class="pill pill-red">Red</span></td>
+          <td class="threshold-cell">NRR ≥120% = Green; NRR 100-120% = Amber; NRR &lt;100% = Red. Current NRR unknown.</td>
+        </tr>
+        <tr class="row-tint">
+          <td>Customer Concentration Exposure</td>
+          <td>Chief Revenue Officer</td>
+          <td><span class="pill pill-red">Red</span></td>
+          <td class="threshold-cell">Top 10 customers &lt;15% revenue = Green; 15-25% = Amber; &gt;25% = Red. Current concentration unknown.</td>
+        </tr>
+        <tr class="">
+          <td>Liquidity Runway and Covenant Compliance</td>
+          <td>CFO / Treasurer</td>
+          <td><span class="pill pill-red">Red</span></td>
+          <td class="threshold-cell">≥24 months operating expense in liquid reserves = Green; 12-24 months = Amber; &lt;12 months = Red. Current runway unknown.</td>
+        </tr>
+        <tr class="row-tint">
+          <td>Gross Retention Rate Tracking</td>
+          <td>Chief Revenue Officer</td>
+          <td><span class="pill pill-red">Red</span></td>
+          <td class="threshold-cell">Gross retention ≥90% = Green; 80-90% = Amber; &lt;80% = Red. Current rate unknown.</td>
+        </tr>
+        <tr class="">
+          <td>Operating Expense Flexibility Assessment</td>
+          <td>CFO / Chief Operating Officer</td>
+          <td><span class="pill pill-red">Red</span></td>
+          <td class="threshold-cell">≥30% variable cost base = Green; 15-30% = Amber; &lt;15% = Red. Current structure unknown.</td>
+        </tr>
+        <tr class="row-tint">
+          <td>AI Integration Depth and Data Moat Strength</td>
+          <td>CTO / Chief Product Officer</td>
+          <td><span class="pill pill-red">Red</span></td>
+          <td class="threshold-cell">Proprietary data moat with differentiated AI capabilities = Green; Partial moat = Amber; Commoditized data = Red. Current status unknown.</td>
+        </tr>
+        <tr class="">
+          <td>Regulatory Compliance Readiness (California TFAIA, Colorado ADA)</td>
+          <td>General Counsel / Chief Compliance Officer</td>
+          <td><span class="pill pill-amber">Amber</span></td>
+          <td class="threshold-cell">Full compliance before Jan 1, 2026 = Green; Compliance plan in progress = Amber; No compliance plan = Red. Effective dates approaching.</td>
+        </tr>
+        <tr class="row-tint">
+          <td>Contract Duration Mix and Renewal Concentration</td>
+          <td>Chief Revenue Officer</td>
+          <td><span class="pill pill-red">Red</span></td>
+          <td class="threshold-cell">Multi-year contracts ≥60% = Green; 30-60% = Amber; &lt;30% = Red. Current mix unknown.</td>
+        </tr>
+        <tr class="">
+          <td>Competitive Positioning and Win/Loss Tracking</td>
+          <td>Chief Strategy Officer / VP Sales</td>
+          <td><span class="pill pill-red">Red</span></td>
+          <td class="threshold-cell">Win rate ≥50% against named competitors = Green; 35-50% = Amber; &lt;35% = Red. No competitor data available.</td>
+        </tr>
+        <tr class="row-tint">
+          <td>CAC Payback Period</td>
+          <td>CFO / Chief Revenue Officer</td>
+          <td><span class="pill pill-red">Red</span></td>
+          <td class="threshold-cell">CAC payback ≤12 months = Green; 12-18 months = Amber; &gt;18 months = Red. Current payback unknown.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="section-gap"></div>
+    <h3 class="sub-heading">Board Dashboard KPI Bands</h3>
+    <div class="bands-grid">
+      
+      <div class="band-card">
+        <div class="band-kpi">Net Revenue Retention (NRR)</div>
+        <div class="band-row green-row"><span class="band-label">Green</span><span class="band-val">≥120%</span></div>
+        <div class="band-row amber-row"><span class="band-label">Amber</span><span class="band-val">100-120%</span></div>
+        <div class="band-row red-row"><span class="band-label">Red</span><span class="band-val">&lt;100%</span></div>
+      </div>
+      <div class="band-card">
+        <div class="band-kpi">Gross Retention Rate</div>
+        <div class="band-row green-row"><span class="band-label">Green</span><span class="band-val">≥90%</span></div>
+        <div class="band-row amber-row"><span class="band-label">Amber</span><span class="band-val">80-90%</span></div>
+        <div class="band-row red-row"><span class="band-label">Red</span><span class="band-val">&lt;80%</span></div>
+      </div>
+      <div class="band-card">
+        <div class="band-kpi">Customer Concentration (Top 10 Revenue %)</div>
+        <div class="band-row green-row"><span class="band-label">Green</span><span class="band-val">&lt;15%</span></div>
+        <div class="band-row amber-row"><span class="band-label">Amber</span><span class="band-val">15-25%</span></div>
+        <div class="band-row red-row"><span class="band-label">Red</span><span class="band-val">&gt;25%</span></div>
+      </div>
+      <div class="band-card">
+        <div class="band-kpi">Liquidity Runway (Months Operating Expense)</div>
+        <div class="band-row green-row"><span class="band-label">Green</span><span class="band-val">≥24 months</span></div>
+        <div class="band-row amber-row"><span class="band-label">Amber</span><span class="band-val">12-24 months</span></div>
+        <div class="band-row red-row"><span class="band-label">Red</span><span class="band-val">&lt;12 months</span></div>
+      </div>
+      <div class="band-card">
+        <div class="band-kpi">CAC Payback Period</div>
+        <div class="band-row green-row"><span class="band-label">Green</span><span class="band-val">≤12 months</span></div>
+        <div class="band-row amber-row"><span class="band-label">Amber</span><span class="band-val">12-18 months</span></div>
+        <div class="band-row red-row"><span class="band-label">Red</span><span class="band-val">&gt;18 months</span></div>
+      </div>
+      <div class="band-card">
+        <div class="band-kpi">Operating Expense Variable Cost %</div>
+        <div class="band-row green-row"><span class="band-label">Green</span><span class="band-val">≥30%</span></div>
+        <div class="band-row amber-row"><span class="band-label">Amber</span><span class="band-val">15-30%</span></div>
+        <div class="band-row red-row"><span class="band-label">Red</span><span class="band-val">&lt;15%</span></div>
+      </div>
+      <div class="band-card">
+        <div class="band-kpi">Multi-Year Contract Mix %</div>
+        <div class="band-row green-row"><span class="band-label">Green</span><span class="band-val">≥60%</span></div>
+        <div class="band-row amber-row"><span class="band-label">Amber</span><span class="band-val">30-60%</span></div>
+        <div class="band-row red-row"><span class="band-label">Red</span><span class="band-val">&lt;30%</span></div>
+      </div>
+      <div class="band-card">
+        <div class="band-kpi">Competitive Win Rate</div>
+        <div class="band-row green-row"><span class="band-label">Green</span><span class="band-val">≥50%</span></div>
+        <div class="band-row amber-row"><span class="band-label">Amber</span><span class="band-val">35-50%</span></div>
+        <div class="band-row red-row"><span class="band-label">Red</span><span class="band-val">&lt;35%</span></div>
+      </div>
+      <div class="band-card">
+        <div class="band-kpi">Price Differential vs Competitors</div>
+        <div class="band-row green-row"><span class="band-label">Green</span><span class="band-val">&lt;20%</span></div>
+        <div class="band-row amber-row"><span class="band-label">Amber</span><span class="band-val">20-30%</span></div>
+        <div class="band-row red-row"><span class="band-label">Red</span><span class="band-val">&gt;30%</span></div>
+      </div>
+      <div class="band-card">
+        <div class="band-kpi">Forward Revenue Valuation Multiple</div>
+        <div class="band-row green-row"><span class="band-label">Green</span><span class="band-val">≥8x (profitable)</span></div>
+        <div class="band-row amber-row"><span class="band-label">Amber</span><span class="band-val">4-8x (profitable) or 2-4x (unprofitable)</span></div>
+        <div class="band-row red-row"><span class="band-label">Red</span><span class="band-val">&lt;4x (profitable) or &lt;2x (unprofitable)</span></div>
+      </div>
+    </div>
+    
+  
+</div>
+
+<div id="checklist" class="content-section">
+  <div class="section-title">Execution Checklist</div>
+  
+    <div class="checklist-cat">
+      <div class="checklist-cat-label">Immediate Financial Visibility (0-7 days)</div>
+      
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Obtain latest 10-Q and 10-K SEC filings for Salesforce (NYSE: CRM) - balance sheet, income statement, cash flow statement</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Extract current cash and short-term investment balances, total debt, and debt maturity schedule</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Calculate current liquidity runway in months of operating expense coverage</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Identify any debt covenants and proximity to covenant breach thresholds</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Verify current profitability status (GAAP operating income, non-GAAP operating margin, free cash flow)</span>
+      </div>
+    </div>
+
+    <div class="checklist-cat">
+      <div class="checklist-cat-label">Unit Economics and Retention Baseline (0-14 days)</div>
+      
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Extract or calculate Net Revenue Retention (NRR) from investor relations materials or earnings calls</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Extract or calculate Gross Revenue Retention rate</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Obtain Customer Acquisition Cost (CAC) and CAC payback period metrics</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Calculate Lifetime Value (LTV) and LTV:CAC ratio</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Identify customer count trends and average contract value (ACV) distribution</span>
+      </div>
+    </div>
+
+    <div class="checklist-cat">
+      <div class="checklist-cat-label">Customer Concentration and Contract Structure (0-14 days)</div>
+      
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Extract top 10 and top 20 customer revenue concentration percentages from SEC filings or investor disclosures</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Determine contract duration mix (annual vs multi-year) and weighted average contract term</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Map vertical industry revenue distribution (financial services, healthcare, retail, technology, other)</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Identify Q4 and Q1 renewal concentration exposure and renewal timing distribution</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Assess geographic revenue concentration and regulatory jurisdiction exposure</span>
+      </div>
+    </div>
+
+    <div class="checklist-cat">
+      <div class="checklist-cat-label">Competitive Field Mapping (0-30 days)</div>
+      
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Identify and list named competitors across Tier 1 (scale), Tier 2 (vertical/regional), and Tier 3 (AI-native startups, low-code alternatives)</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Conduct win/loss analysis against top 5 competitors for past 12 months</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Benchmark pricing positioning: calculate price differential percentages versus primary competitors</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Map competitor AI integration depth and proprietary data moat strength</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Assess competitive displacement velocity trends (win rate changes, sales cycle duration changes)</span>
+      </div>
+    </div>
+
+    <div class="checklist-cat">
+      <div class="checklist-cat-label">Technology and AI Defensive Posture (0-30 days)</div>
+      
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Map current AI integration depth across product portfolio (predictive analytics, workflow automation, generative AI features)</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Assess proprietary dataset differentiation and data moat defensibility against AI workflow replication</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Quantify switching friction strength (data migration complexity, integration depth, user training requirements)</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Evaluate R&amp;D investment allocation to AI capabilities versus competitor spend levels</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Identify workflow automation capabilities that could be replicated by low-code + LLM combinations</span>
+      </div>
+    </div>
+
+    <div class="checklist-cat">
+      <div class="checklist-cat-label">Regulatory Compliance Readiness (0-60 days)</div>
+      
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Map AI feature deployment footprint against California TFAIA and Colorado ADA high-risk categories (employment, credit, housing, insurance, criminal justice)</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Assess mandatory impact assessment and bias audit requirements under new regulations (effective Jan 1, 2026 and June 30, 2026)</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Quantify estimated compliance cost increase for affected AI systems</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Verify GDPR, CCPA, HIPAA, PCI-DSS, and financial services compliance status for customer verticals</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Build regulatory compliance cost inflation into forward pricing models and margin forecasts</span>
+      </div>
+    </div>
+
+    <div class="checklist-cat">
+      <div class="checklist-cat-label">Operating Expense Flexibility Assessment (0-30 days)</div>
+      
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Decompose operating expense base into variable costs (scale with customer base) versus fixed obligations</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Calculate variable cost percentage of total operating expenses</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Model margin compression velocity under 10%, 20%, and 30% revenue deceleration scenarios</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Identify cost reduction levers and time-to-implementation for operating expense flex capacity</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Assess sales and marketing efficiency (CAC trends, sales headcount productivity) for rapid adjustment capability</span>
+      </div>
+    </div>
+
+    <div class="checklist-cat">
+      <div class="checklist-cat-label">Scenario Stress Testing and Survival Modeling (30-60 days)</div>
+      
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Model liquidity runway under revenue deceleration scenarios (0%, -10%, -20%, -30% growth rates)</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Test covenant breach proximity under margin compression and cash flow deterioration scenarios</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Quantify churn impact if price concessions of 10%, 20%, 30% required to defend renewal rates</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Model NRR deterioration scenarios and impact on forward revenue growth sustainability</span>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="checkbox"></div>
+        <span class="check-text">Calculate time-to-constraint under adverse scenario combinations (budget cuts + AI substitution + procurement leverage)</span>
+      </div>
+    </div>
+</div>
+
+<div id="gaps" class="content-section">
+  <div class="section-title">Data Gaps &amp; Intelligence</div>
+  
+    <div class="gap-block">
+      <div class="gap-header">
+        <span class="gap-text">Balance sheet, income statement, and cash flow statement data absent despite public company status (NYSE: CRM). SEC filings (10-Q, 10-K) contain this data but not provided in intake materials.</span>
+        <div class="gap-meta"><span class="pill pill-red">Critical</span> &nbsp; <span class="gap-horizon">Immediate</span></div>
+      </div>
+    </div>
+
+    <div class="gap-block">
+      <div class="gap-header">
+        <span class="gap-text">Unit economics completely unknown: Customer Acquisition Cost (CAC), Lifetime Value (LTV), CAC payback period, LTV:CAC ratio. Cannot model revenue sustainability or growth capacity without these metrics.</span>
+        <div class="gap-meta"><span class="pill pill-red">Critical</span> &nbsp; <span class="gap-horizon">Immediate</span></div>
+      </div>
+    </div>
+
+    <div class="gap-block">
+      <div class="gap-header">
+        <span class="gap-text">Net Revenue Retention (NRR) and Gross Revenue Retention unknown. SaaS survival hinge depends on retention economics; cannot stress-test without baseline NRR measurement.</span>
+        <div class="gap-meta"><span class="pill pill-red">Critical</span> &nbsp; <span class="gap-horizon">Immediate</span></div>
+      </div>
+    </div>
+
+    <div class="gap-block">
+      <div class="gap-header">
+        <span class="gap-text">Customer concentration (top 10, top 20 revenue %) unknown. Single-customer loss impact and revenue volatility cannot be quantified.</span>
+        <div class="gap-meta"><span class="pill pill-red">Critical</span> &nbsp; <span class="gap-horizon">Immediate</span></div>
+      </div>
+    </div>
+
+    <div class="gap-block">
+      <div class="gap-header">
+        <span class="gap-text">Contract duration mix (annual vs multi-year) and renewal timing concentration unknown. Revenue predictability and Q4/Q1 renewal risk exposure unquantifiable.</span>
+        <div class="gap-meta"><span class="pill pill-red">Critical</span> &nbsp; <span class="gap-horizon">Immediate</span></div>
+      </div>
+    </div>
+
+    <div class="gap-block">
+      <div class="gap-header">
+        <span class="gap-text">Operating expense structure (variable vs fixed cost breakdown) unknown. Margin compression velocity under revenue deceleration cannot be modeled.</span>
+        <div class="gap-meta"><span class="pill pill-red">Critical</span> &nbsp; <span class="gap-horizon">Immediate</span></div>
+      </div>
+    </div>
+
+    <div class="gap-block">
+      <div class="gap-header">
+        <span class="gap-text">Zero named competitors identified. Competitive displacement velocity, win/loss dynamics, and strategic response capacity against AI-native entrants cannot be mapped.</span>
+        <div class="gap-meta"><span class="pill pill-red">Critical</span> &nbsp; <span class="gap-horizon">30-day</span></div>
+      </div>
+    </div>
+
+    <div class="gap-block">
+      <div class="gap-header">
+        <span class="gap-text">Technology stack architecture and AI integration depth unknown. Defensive capacity against AI workflow replication and competitive AI capabilities unmeasurable.</span>
+        <div class="gap-meta"><span class="pill pill-amber">High</span> &nbsp; <span class="gap-horizon">30-day</span></div>
+      </div>
+    </div>
+
+    <div class="gap-block">
+      <div class="gap-header">
+        <span class="gap-text">Proprietary data moat strength and switching friction quantification absent. Cannot assess defensibility against low-code + LLM workflow substitution.</span>
+        <div class="gap-meta"><span class="pill pill-amber">High</span> &nbsp; <span class="gap-horizon">30-day</span></div>
+      </div>
+    </div>
+
+    <div class="gap-block">
+      <div class="gap-header">
+        <span class="gap-text">Vertical industry revenue distribution unknown. Macro sensitivity when specific sectors (financial services, healthcare, retail) contract is unquantifiable.</span>
+        <div class="gap-meta"><span class="pill pill-amber">High</span> &nbsp; <span class="gap-horizon">30-day</span></div>
+      </div>
+    </div>
+
+    <div class="gap-block">
+      <div class="gap-header">
+        <span class="gap-text">Regulatory compliance exposure mapping incomplete. Data privacy (GDPR, CCPA), industry-specific (HIPAA, PCI-DSS, financial services), and AI governance (TFAIA, ADA) cost impacts unquantified.</span>
+        <div class="gap-meta"><span class="pill pill-amber">High</span> &nbsp; <span class="gap-horizon">30-day</span></div>
+      </div>
+    </div>
+
+    <div class="gap-block">
+      <div class="gap-header">
+        <span class="gap-text">Debt structure, debt maturity schedule, and covenant terms unknown. Refinancing risk and covenant breach proximity under cash flow deterioration cannot be assessed.</span>
+        <div class="gap-meta"><span class="pill pill-amber">High</span> &nbsp; <span class="gap-horizon">Immediate</span></div>
+      </div>
+    </div>
+
+    <div class="gap-block">
+      <div class="gap-header">
+        <span class="gap-text">Sales efficiency metrics (sales headcount productivity, sales cycle duration trends, win rate trends) absent. Cannot model sales force flex capacity or competitive positioning changes.</span>
+        <div class="gap-meta"><span class="pill pill-green">Medium</span> &nbsp; <span class="gap-horizon">30-day</span></div>
+      </div>
+    </div>
+
+    <div class="gap-block">
+      <div class="gap-header">
+        <span class="gap-text">Geographic revenue concentration and regulatory jurisdiction exposure unknown. Geopolitical risk and regulatory fragmentation impact unmeasurable.</span>
+        <div class="gap-meta"><span class="pill pill-green">Medium</span> &nbsp; <span class="gap-horizon">90-day</span></div>
+      </div>
+    </div>
+
+    <div class="gap-block">
+      <div class="gap-header">
+        <span class="gap-text">R&amp;D investment allocation to AI capabilities versus total R&amp;D budget unknown. Cannot benchmark innovation velocity against competitors or assess AI defensive investment adequacy.</span>
+        <div class="gap-meta"><span class="pill pill-green">Medium</span> &nbsp; <span class="gap-horizon">90-day</span></div>
+      </div>
+    </div>
+</div>
+
+<footer class="site-footer">
+  <div><strong>AEGYON</strong> — Structural Intelligence</div>
+  <div style="margin-top:6px">Dead Man Walking is a free diagnostic. What comes after it isn't. &middot; aegyon.com &middot; Confidential</div>
+</footer>
+
+<script>
+function sw(tab,btn){
+  document.querySelectorAll('.content-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(tab).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function toggleCheck(el){
+  el.classList.toggle('checked');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEGYON Sample Dossiers</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif; background: linear-gradient(135deg, #0D1117 0%, #1a1f3a 100%); color: #FFFFFF; line-height: 1.6; overflow-x: hidden; }
+        header { background: rgba(26, 31, 58, 0.95); backdrop-filter: blur(10px); padding: 3rem 2rem; border-bottom: 2px solid #00CFDE; text-align: center; }
+        .logo { font-size: 2.5rem; font-weight: 900; margin-bottom: 1rem; color: #FFFFFF; letter-spacing: -1px; }
+        h1 { font-size: 2.8rem; font-weight: 700; margin-bottom: 0.5rem; color: #FFFFFF; }
+        .tagline { font-size: 1.1rem; color: rgba(255, 255, 255, 0.8); max-width: 600px; margin: 0 auto; font-weight: 300; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
+        .back-link { display: inline-block; color: #00CFDE; text-decoration: none; margin-bottom: 2rem; font-weight: 600; }
+        .back-link:hover { text-decoration: underline; }
+        .intro-section { background: rgba(255, 255, 255, 0.05); border-left: 4px solid #00CFDE; padding: 2rem; margin-bottom: 3rem; border-radius: 8px; }
+        .intro-section h2 { font-size: 1.5rem; margin-bottom: 1rem; color: #00CFDE; }
+        .intro-section p { font-size: 0.95rem; color: rgba(255, 255, 255, 0.85); margin-bottom: 1rem; line-height: 1.8; }
+        .dossiers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+        .dossier-card { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 207, 222, 0.3); border-radius: 12px; padding: 2rem; backdrop-filter: blur(10px); transition: all 0.3s ease; display: flex; flex-direction: column; }
+        .dossier-card:hover { background: rgba(255, 255, 255, 0.12); border-color: #00CFDE; transform: translateY(-4px); }
+        .dossier-type { font-size: 0.85rem; color: rgba(0, 207, 222, 0.8); font-weight: 600; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px; }
+        .dossier-card h2 { font-size: 1.5rem; color: #00CFDE; margin-bottom: 1rem; }
+        .dossier-description { font-size: 0.95rem; color: rgba(255, 255, 255, 0.85); margin-bottom: 1.5rem; line-height: 1.7; flex-grow: 1; }
+        .dossier-link { display: inline-block; background: linear-gradient(135deg, #00CFDE, #00a8b8); color: #1a1f3a; padding: 0.75rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: all 0.3s ease; text-align: center; }
+        .dossier-link:hover { opacity: 0.9; transform: scale(1.05); }
+        footer { background: rgba(26, 31, 58, 0.95); border-top: 1px solid rgba(0, 207, 222, 0.2); padding: 2rem; text-align: center; font-size: 0.85rem; color: rgba(255, 255, 255, 0.6); margin-top: 3rem; }
+        @media (max-width: 768px) { h1 { font-size: 2rem; } .dossiers-grid { grid-template-columns: 1fr; } .container { padding: 1.5rem 1rem; } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Λ AEGYON</div>
+        <h1>Sample Structural Dossiers</h1>
+        <p class="tagline">Board-grade structural diagnostics across three industries.</p>
+    </header>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Home</a>
+        <section class="intro-section">
+            <h2>Complete Structural Diagnostics</h2>
+            <p>Below are three redacted structural dossiers demonstrating AEGYON's analysis framework across different industries and business models.</p>
+            <p>Each dossier identifies the 10 structural domains, maps forced decision timelines, and surfaces the constraints that will reshape capital and strategic positioning in the 12–36 month window.</p>
+        </section>
+        <div class="dossiers-grid">
+            <div class="dossier-card">
+                <div class="dossier-type">Manufacturing & Operations</div>
+                <h2>Mauritius Structural Dossier</h2>
+                <p class="dossier-description">Manufacturing-focused portfolio company facing integration complexity, supply chain volatility, and macro currency exposure. Identifies the forcing decisions around capex timing and working capital management.</p>
+                <a href="Mauritius_Structural_Dossier.pdf" class="dossier-link" download>Download Dossier</a>
+            </div>
+            <div class="dossier-card">
+                <div class="dossier-type">Enterprise Software</div>
+                <h2>Salesforce Structural Dossier</h2>
+                <p class="dossier-description">SaaS platform with rapid growth, high burn, and competitive displacement risk. Analyzes capital adequacy, market shift vulnerability, and the forced decisions around profitability runway and customer concentration.</p>
+                <a href="Salesforce_Structural_Dossier.pdf" class="dossier-link" download>Download Dossier</a>
+            </div>
+            <div class="dossier-card">
+                <div class="dossier-type">Travel & Hospitality</div>
+                <h2>TravelCo Structural Dossier</h2>
+                <p class="dossier-description">Travel marketplace with regulatory exposure, macro sensitivity, and technology disruption risk. Identifies constraints around liquidity, regulatory forcing events, and strategic positioning in a post-COVID market.</p>
+                <a href="TravelCo_Structural_Dossier.pdf" class="dossier-link" download>Download Dossier</a>
+            </div>
+        </div>
+        <section class="intro-section" style="text-align: center; margin-top: 3rem;">
+            <h2>Want a Structural Diagnosis for Your Portfolio?</h2>
+            <p>Send us a portfolio company. We'll surface the structural constraints you haven't seen yet in 7–10 business days.</p>
+            <a href="mailto:Team@Aegyon.com?subject=Structural%20Diagnosis" style="color: #00CFDE; font-weight: 600; text-decoration: none;">Request a Diagnosis</a>
+        </section>
+    </div>
+    <footer>
+        <p>AEGYON — Structural Diagnostics</p>
+        <p>Sample Dossiers | Confidential</p>
+        <p style="margin-top: 1rem;"><a href="https://aegyon.com" style="color: #00CFDE; text-decoration: none; font-weight: 600;">aegyon.com</a> | <a href="mailto:Team@Aegyon.com" style="color: #00CFDE; text-decoration: none; font-weight: 600;">Team@Aegyon.com</a></p>
+        <p style="margin-top: 1rem; font-size: 0.8rem;">© 2026 AEGYON. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEGYON — PE/VC Structural Due Diligence</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0D1117 0%, #1a1f3a 100%);
+            color: #FFFFFF;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        header {
+            background: rgba(26, 31, 58, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 4rem 2rem;
+            border-bottom: 2px solid #00CFDE;
+            text-align: center;
+        }
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            color: #FFFFFF;
+            letter-spacing: -1px;
+        }
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #FFFFFF;
+        }
+        .tagline {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        .hero-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #00CFDE;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            border-radius: 8px;
+        }
+        .hero-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #00CFDE;
+        }
+        .hero-section p {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+        .problem-section {
+            background: rgba(255, 77, 106, 0.08);
+            border: 1px solid rgba(255, 77, 106, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            backdrop-filter: blur(10px);
+        }
+        .problem-section h2 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #FF4D6A;
+        }
+        .solution-section {
+            background: rgba(0, 207, 222, 0.08);
+            border: 1px solid rgba(0, 207, 222, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            backdrop-filter: blur(10px);
+        }
+        .solution-section h2 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #00CFDE;
+        }
+        .solution-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        .solution-section li {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 0.8rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+        .solution-section li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #00CFDE;
+            font-weight: bold;
+        }
+        .samples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .sample-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(0, 207, 222, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .sample-card:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: #00CFDE;
+            transform: translateY(-4px);
+        }
+        .sample-card h3 {
+            font-size: 1.3rem;
+            color: #00CFDE;
+            margin-bottom: 0.5rem;
+        }
+        .sample-card p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+        }
+        .sample-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #00CFDE, #00a8b8);
+            color: #1a1f3a;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        .cta-section {
+            background: rgba(0, 207, 222, 0.1);
+            border: 1px solid #00CFDE;
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #00CFDE, #00a8b8);
+            color: #1a1f3a;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        footer {
+            background: rgba(26, 31, 58, 0.95);
+            border-top: 1px solid rgba(0, 207, 222, 0.2);
+            padding: 2rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Λ AEGYON</div>
+        <h1>PE/VC Structural Due Diligence</h1>
+        <p class="tagline">Identify hidden constraints that force strategic decisions — before they force decisions on you.</p>
+    </header>
+    <div class="container">
+        <a href="index.html" style="display: inline-block; color: #00CFDE; text-decoration: none; margin-bottom: 2rem; font-weight: 600;">← Back to Home</a>
+        <section class="hero-section">
+            <h2>The Problem Hidden in Plain Sight</h2>
+            <p>Portfolio companies appear stable until they hit a structural constraint. Capital tightens. Regulations shift. Competitors accelerate. Technology disrupts. You see it 12–18 months too late. By then, strategic optionality has compressed and value creation has stalled.</p>
+            <p><strong>AEGYON surfaces structural constraints before they force the decision.</strong></p>
+        </section>
+        <section class="problem-section">
+            <h2>Where Standard Due Diligence Misses</h2>
+            <p>Traditional financial and operational due diligence answers: "Is this company healthy today?" AEGYON answers: "What constraint will force a decision on this company in the next 12–36 months?"</p>
+        </section>
+        <section class="solution-section">
+            <h2>AEGYON's Approach</h2>
+            <ul>
+                <li><strong>12–36 Month Horizon:</strong> The constraint window where strategic decisions become irreversible.</li>
+                <li><strong>10 Structural Domains:</strong> Capital, regulatory, market, competitive, operational, customer, technology, talent, synergy, governance.</li>
+                <li><strong>Forced Decision Mapping:</strong> When does each constraint force a decision? What capital or capability changes resolve it?</li>
+            </ul>
+        </section>
+        <h2 style="margin-top: 3rem;">See It In Action</h2>
+        <div class="samples-grid">
+            <div class="sample-card">
+                <h3>Sample Dossiers</h3>
+                <p>Three redacted board-grade structural analyses across different industries (Mauritius, Salesforce, TravelCo).</p>
+                <a href="sample-dossiers.html" class="sample-link">Explore</a>
+            </div>
+            <div class="sample-card">
+                <h3>Supporting Reports</h3>
+                <p>27+ structured reports covering governance, compliance, stakeholder positioning, and macro intelligence.</p>
+                <a href="sample-reports.html" class="sample-link">Browse</a>
+            </div>
+            <div class="sample-card">
+                <h3>Analysis Framework</h3>
+                <p>Interactive analysis showing competitive positioning, decision matrices, and structural domain diagnostics.</p>
+                <a href="salesforce-field-brief.html" class="sample-link">Explore</a>
+            </div>
+        </div>
+        <section class="cta-section">
+            <h2>Ready for Structural Clarity?</h2>
+            <p>Send us a portfolio company. We'll surface the structural constraints you haven't seen yet.</p>
+            <a href="mailto:Team@Aegyon.com" class="cta-button">Request a Diagnosis</a>
+        </section>
+    </div>
+    <footer>
+        <p>AEGYON — Structural Diagnostics</p>
+        <p><a href="https://aegyon.com" style="color: #00CFDE; text-decoration: none; font-weight: 600;">aegyon.com</a> | <a href="mailto:Team@Aegyon.com" style="color: #00CFDE; text-decoration: none; font-weight: 600;">Team@Aegyon.com</a></p>
+        <p style="margin-top: 0.5rem;">© 2026 AEGYON. All rights reserved.</p>
+    </footer>
+</body>
+</html>

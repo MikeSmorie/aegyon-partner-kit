@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thesis Invalidation Watch — Salesforce, Inc.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0F2744;
+            --primary-light: #1B3A67;
+            --accent: #00CFDE;
+            --success: #2ECC8F;
+            --warning: #FFB547;
+            --critical: #FF4D6A;
+            --light-bg: #F4F6F9;
+            --border: #DDE3ED;
+            --text-dark: #1a2233;
+            --text-light: #5a6a82;
+            --text-muted: #8899aa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--light-bg);
+            font-family: 'DM Sans', system-ui, sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #0a1a30 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        header .subtitle {
+            font-size: 16px;
+            opacity: 0.75;
+            font-weight: 500;
+        }
+
+        header .metadata {
+            font-size: 13px;
+            opacity: 0.5;
+            margin-top: 20px;
+            font-weight: 400;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .thesis-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin: 30px 0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            border-left: 4px solid var(--accent);
+        }
+
+        .thesis-card .label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--accent);
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+        }
+
+        .thesis-card .thesis-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.5;
+        }
+
+        .why-matters-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin: 30px 0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+
+        .why-matters-card h3 {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .why-matters-card p {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        .signal-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+
+        .signal-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .signal-card h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .signal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 16px;
+        }
+
+        .signal-field-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .signal-field-value {
+            font-size: 13px;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .data-track {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            background: var(--light-bg);
+            padding: 10px 14px;
+            border-radius: 6px;
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin-top: 4px;
+        }
+
+        .cadence-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .cadence-daily {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .cadence-weekly {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .cadence-monthly {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .cadence-quarterly {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .status-pill {
+            display: inline-block;
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-green {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .status-amber {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-red {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .escalation-threshold {
+            margin-top: 16px;
+            padding: 12px 16px;
+            background: rgba(255,77,106,0.04);
+            border-left: 3px solid var(--critical);
+            border-radius: 4px;
+        }
+
+        .escalation-threshold .label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--critical);
+            margin-bottom: 4px;
+        }
+
+        .escalation-threshold .value {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+
+        .dashboard-card h2 {
+            color: var(--primary);
+            margin-bottom: 24px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            text-align: left;
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 16px;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:nth-child(even) {
+            background: var(--light-bg);
+        }
+
+        tr:hover {
+            background: rgba(0,207,222,0.03);
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            border-left: 4px solid var(--critical);
+        }
+
+        .action-card h3 {
+            color: var(--critical);
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .action-card ul {
+            list-style: disc;
+            padding-left: 20px;
+        }
+
+        .action-card li {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-light);
+            padding: 4px 0;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 12px;
+            margin: 40px 0 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        footer .line1 {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .signal-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 24px;
+            }
+            
+            .thesis-card .thesis-text {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Thesis Invalidation Watch — Salesforce, Inc.</h1>
+        <div class="subtitle">Monitor falsifiability. Act on red signals.</div>
+        <div class="metadata">Generated: January 2026</div>
+    </header>
+
+    <div class="container">
+        <div class="thesis-card">
+            <div class="label">Primary Structural Thesis</div>
+            <div class="thesis-text">
+                AI-driven procurement transparency combined with generative AI workflow substitution will compress Salesforce's pricing power and differentiation velocity faster than product evolution can offset, forcing strategic capital allocation decisions within 18 months under conditions of enterprise budget compression.
+            </div>
+        </div>
+
+        <div class="why-matters-card">
+            <h3>Why This Thesis Matters</h3>
+            <p>
+                If this thesis holds, Salesforce faces simultaneous margin compression and growth deceleration as enterprise customers gain procurement leverage through AI-powered competitive benchmarking while simultaneously evaluating lower-cost AI-native alternatives. This dual force accelerates renewal churn risk, reduces net revenue retention, and compresses operating leverage—potentially forcing capital structure decisions, strategic M&A, or material cost reductions within 12–24 months. The consequence is not immediate insolvency but strategic constraint: reduced optionality, increased cost of capital, and potential valuation multiple compression that limits access to growth financing.
+            </p>
+        </div>
+
+        <div class="signal-card">
+            <div class="signal-card-header">
+                <h3>Signal 1: Net Revenue Retention Holds Above 115%</h3>
+                <span class="status-pill status-green">Green — OK</span>
+            </div>
+            <div class="signal-grid">
+                <div>
+                    <div class="signal-field-label">What it means if observed</div>
+                    <div class="signal-field-value">
+                        Existing customers continue to expand spending despite AI alternatives and procurement pressure, indicating product embeddedness remains strong and switching costs remain high. This invalidates the core thesis that AI-driven procurement and workflow substitution are compressing customer retention economics.
+                    </div>
+                </div>
+                <div>
+                    <div class="signal-field-label">Current Status (as of Jan 2026)</div>
+                    <div class="signal-field-value">
+                        Unknown — requires Q4 FY2025 earnings release and investor presentation. Last reported NRR (if disclosed) would be in Q3 FY2025 10-Q filing.
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="signal-field-label">What data would prove it</div>
+                <div class="data-track">
+                    Source: Salesforce quarterly earnings call transcript + 10-Q filing, Section "Key Metrics"<br>
+                    Metric: Net Revenue Retention (NRR) or "Remaining Performance Obligation growth rate"<br>
+                    Threshold: NRR ≥115% for two consecutive quarters = thesis invalidated<br>
+                    Access: SEC EDGAR (sec.gov), investor.salesforce.com
+                </div>
+            </div>
+            <div class="signal-grid" style="margin-top: 16px;">
+                <div>
+                    <div class="signal-field-label">Monitoring Cadence</div>
+                    <div class="signal-field-value">
+                        <span class="cadence-badge cadence-quarterly">Quarterly</span> — Check within 48 hours of earnings release
+                    </div>
+                </div>
+                <div>
+                    <div class="signal-field-label">Next Check Date</div>
+                    <div class="signal-field-value">
+                        Q4 FY2025 earnings (expected late Feb/early Mar 2026)
+                    </div>
+                </div>
+            </div>
+            <div class="escalation-threshold">
+                <div class="label">Threshold for Escalation</div>
+                <div class="value">
+                    Red trigger: NRR ≥115% sustained for 2+ consecutive quarters while Revenue Per Employee increases YoY → convene board review, reassess entire structural threat model
+                </div>
+            </div>
+        </div>
+
+        <div class="signal-card">
+            <div class="signal-card-header">
+                <h3>Signal 2: Customer Acquisition Cost Decreases YoY</h3>
+                <span class="status-pill status-green">Green — OK</span>
+            </div>
+            <div class="signal-grid">
+                <div>
+                    <div class="signal-field-label">What it means if observed</div>
+                    <div class="signal-field-value">
+                        Salesforce is acquiring new customers more efficiently despite AI-native competition, indicating brand strength and product differentiation remain intact. Decreasing CAC while maintaining or growing new bookings invalidates the thesis that competitive pressure is increasing customer acquisition friction.
+                    </div>
+                </div>
+                <div>
+                    <div class="signal-field-label">Current Status (as of Jan 2026)</div>
+                    <div class="signal-field-value">
+                        Unknown — calculate from 10-K: CAC = (Sales & Marketing Expense) / (Net New Customers Added). Historical trend analysis required.
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="signal-field-label">What data would prove it</div>
+                <div class="data-track">
+                    Source: Annual 10-K filing, "Management Discussion & Analysis" + income statement<br>
+                    Calculation: CAC = Total S&M Expense / Net New Customers (or proxy: new subscription ARR)<br>
+                    Comparison: FY2025 CAC vs FY2024 CAC, adjusted for inflation<br>
+                    Access: SEC EDGAR form 10-K, search "Sales and Marketing" in financials
+                </div>
+            </div>
+            <div class="signal-grid" style="margin-top: 16px;">
+                <div>
+                    <div class="signal-field-label">Monitoring Cadence</div>
+                    <div class="signal-field-value">
+                        <span class="cadence-badge cadence-quarterly">Quarterly</span> — Calculate from 10-Q filings
+                    </div>
+                </div>
+                <div>
+                    <div class="signal-field-label">Next Check Date</div>
+                    <div class="signal-field-value">
+                        Q1 FY2026 10-Q filing (expected May 2026)
+                    </div>
+                </div>
+            </div>
+            <div class="escalation-threshold">
+                <div class="label">Threshold for Escalation</div>
+                <div class="value">
+                    Red trigger: CAC decreases >10% YoY for 2+ consecutive quarters while new bookings growth accelerates → thesis invalidated, reassess competitive field architecture
+                </div>
+            </div>
+        </div>
+
+        <div class="signal-card">
+            <div class="signal-card-header">
+                <h3>Signal 3: Gross Margin Expands Despite AI Investment</h3>
+                <span class="status-pill status-green">Green — OK</span>
+            </div>
+            <div class="signal-grid">
+                <div>
+                    <div class="signal-field-label">What it means if observed</div>
+                    <div class="signal-field-value">
+                        Salesforce is successfully integrating AI into product delivery while reducing infrastructure costs faster than AI R&D increases operating expenses. Gross margin expansion invalidates the thesis that AI competition forces price compression faster than operational efficiency gains.
+                    </div>
+                </div>
+                <div>
+                    <div class="signal-field-label">Current Status (as of Jan 2026)</div>
+                    <div class="signal-field-value">
+                        Unknown — requires Q3 FY2025 10-Q gross margin data. Typical SaaS gross margin: 70–80%. Monitor quarterly trend.
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="signal-field-label">What data would prove it</div>
+                <div class="data-track">
+                    Source: Quarterly 10-Q filing, Consolidated Statements of Operations<br>
+                    Metric: Gross Margin % = (Revenue - Cost of Revenue) / Revenue<br>
+                    Comparison: Sequential quarter expansion + YoY expansion for 2+ quarters<br>
+                    Context: Cross-reference with "AI and innovation" commentary in earnings calls
+                </div>
+            </div>
+            <div class="signal-grid" style="margin-top: 16px;">
+                <div>
+                    <div class="signal-field-label">Monitoring Cadence</div>
+                    <div class="signal-field-value">
+                        <span class="cadence-badge cadence-quarterly">Quarterly</span> — Review within 72 hours of 10-Q filing
+                    </div>
+                </div>
+                <div>
+                    <div class="signal-field-label">Next Check Date</div>
+                    <div class="signal-field-value">
+                        Q4 FY2025 10-K filing (expected March 2026)
+                    </div>
+                </div>
+            </div>
+            <div class="escalation-threshold">
+                <div class="label">Threshold for Escalation</div>
+                <div class="value">
+                    Red trigger: Gross margin expands ≥200bps YoY for 2+ consecutive quarters while revenue growth accelerates → invalidates margin compression thesis, reassess operational leverage model
+                </div>
+            </div>
+        </div>
+
+        <div class="signal-card">
+            <div class="signal-card-header">
+                <h3>Signal 4: No Material Customer Losses Disclosed</h3>
+                <span class="status-pill status-green">Green — OK</span>
+            </div>
+            <div class="signal-grid">
+                <div>
+                    <div class="signal-field-label">What it means if observed</div>
+                    <div class="signal-field-value">
+                        Large enterprise customers are not defecting to AI-native competitors or building internal CRM alternatives, indicating switching costs and integration depth remain prohibitively high. Absence of material customer losses invalidates the thesis that AI-driven workflow replication is reducing customer lock-in.
+                    </div>
+                </div>
+                <div>
+                    <div class="signal-field-label">Current Status (as of Jan 2026)</div>
+                    <div class="signal-field-value">
+                        Unknown — requires monitoring of 8-K filings (material event disclosures), earnings call transcripts, and trade press. No 8-K customer loss disclosures = signal holds green.
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="signal-field-label">What data would prove it</div>
+                <div class="data-track">
+                    Source 1: SEC 8-K filings for "loss of major customer" material event disclosures<br>
+                    Source 2: Quarterly earnings call transcripts, analyst Q&A regarding churn or logo losses<br>
+                    Source 3: Trade publications (TechCrunch, The Information) reporting customer defections<br>
+                    Threshold: Zero material customer losses (>1% annual revenue) disclosed over 12 months
+                </div>
+            </div>
+            <div class="signal-grid" style="margin-top: 16px;">
+                <div>
+                    <div class="signal-field-label">Monitoring Cadence</div>
+                    <div class="signal-field-value">
+                        <span class="cadence-badge cadence-monthly">Monthly</span> — Scan 8-K filings + media monitoring
+                    </div>
+                </div>
+                <div>
+                    <div class="signal-field-label">Next Check Date</div>
+                    <div class="signal-field-value">
+                        February 15, 2026 (monthly review cycle)
+                    </div>
+                </div>
+            </div>
+            <div class="escalation-threshold">
+                <div class="label">Threshold for Escalation</div>
+                <div class="value">
+                    Red trigger: Zero customer losses disclosed over 12+ months while competitors report customer acquisition acceleration → invalidates displacement velocity thesis, reassess competitive threat model
+                </div>
+            </div>
+        </div>
+
+        <div class="signal-card">
+            <div class="signal-card-header">
+                <h3>Signal 5: AI Product Revenue Exceeds $2B ARR</h3>
+                <span class="status-pill status-green">Green — OK</span>
+            </div>
+            <div class="signal-grid">
+                <div>
+                    <div class="signal-field-label">What it means if observed</div>
+                    <div class="signal-field-value">
+                        Salesforce is successfully monetizing AI features (Einstein, Agentforce) at material scale, demonstrating customers value AI integration within existing CRM workflows rather than replacing Salesforce with AI-native alternatives. Rapid AI revenue growth invalidates the thesis that AI accelerates competitive displacement.
+                    </div>
+                </div>
+                <div>
+                    <div class="signal-field-label">Current Status (as of Jan 2026)</div>
+                    <div class="signal-field-value">
+                        Unknown — requires disclosure in earnings calls or investor presentations. Salesforce has disclosed "Agentforce" product but not standalone revenue. Monitor for ARR disclosures.
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="signal-field-label">What data would prove it</div>
+                <div class="data-track">
+                    Source: Quarterly earnings call transcripts, investor presentations, product-specific ARR disclosures<br>
+                    Metric: "Einstein ARR" or "AI product revenue" or "Agentforce ARR"<br>
+                    Threshold: Disclosed AI-specific ARR reaches $2B+ (indicates ~5–7% of total revenue if CRM ≈$30B)<br>
+                    Access: investor.salesforce.com, earnings call replays
+                </div>
+            </div>
+            <div class="signal-grid" style="margin-top: 16px;">
+                <div>
+                    <div class="signal-field-label">Monitoring Cadence</div>
+                    <div class="signal-field-value">
+                        <span class="cadence-badge cadence-quarterly">Quarterly</span> — Review earnings materials for AI revenue disclosure
+                    </div>
+                </div>
+                <div>
+                    <div class="signal-field-label">Next Check Date</div>
+                    <div class="signal-field-value">
+                        Q4 FY2025 earnings release (Feb/Mar 2026)
+                    </div>
+                </div>
+            </div>
+            <div class="escalation-threshold">
+                <div class="label">Threshold for Escalation</div>
+                <div class="value">
+                    Red trigger: AI product ARR exceeds $2B and grows >50% YoY for 2+ consecutive quarters → invalidates AI substitution threat, reassess AI integration as defensive moat vs. displacement risk
+                </div>
+            </div>
+        </div>
+
+        <div class="signal-card">
+            <div class="signal-card-header">
+                <h3>Signal 6: Operating Cash Flow Margin Improves YoY</h3>
+                <span class="status-pill status-green">Green — OK</span>
+            </div>
+            <div class="signal-grid">
+                <div>
+                    <div class="signal-field-label">What it means if observed</div>
+                    <div class="signal-field-value">
+                        Salesforce is generating more cash from operations relative to revenue despite AI investment and competitive pressure, indicating profitable growth and operational discipline. Improving cash generation invalidates the thesis that margin compression forces strategic capital decisions within 18 months.
+                    </div>
+                </div>
+                <div>
+                    <div class="signal-field-label">Current Status (as of Jan 2026)</div>
+                    <div class="signal-field-value">
+                        Unknown — calculate from 10-Q/10-K cash flow statement. Typical SaaS leaders: 25–35% operating cash flow margin.
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="signal-field-label">What data would prove it</div>
+                <div class="data-track">
+                    Source: Quarterly 10-Q/10-K, Consolidated Statements of Cash Flows<br>
+                    Calculation: Operating Cash Flow Margin = Operating Cash Flow / Total Revenue<br>
+                    Comparison: FY2025 vs FY2024 margin, adjusted for one-time items<br>
+                    Threshold: Margin improvement ≥100bps YoY sustained for 2+ quarters
+                </div>
+            </div>
+            <div class="signal-grid" style="margin-top: 16px;">
+                <div>
+                    <div class="signal-field-label">Monitoring Cadence</div>
+                    <div class="signal-field-value">
+                        <span class="cadence-badge cadence-quarterly">Quarterly</span> — Calculate from cash flow statement
+                    </div>
+                </div>
+                <div>
+                    <div class="signal-field-label">Next Check Date</div>
+                    <div class="signal-field-value">
+                        Q4 FY2025 10-K filing (March 2026)
+                    </div>
+                </div>
+            </div>
+            <div class="escalation-threshold">
+                <div class="label">Threshold for Escalation</div>
+                <div class="value">
+                    Red trigger: Operating cash flow margin improves ≥200bps YoY for 2+ consecutive quarters while revenue growth accelerates → invalidates capital constraint thesis, reassess liquidity and strategic optionality
+                </div>
+            </div>
+        </div>
+
+        <div class="signal-card">
+            <div class="signal-card-header">
+                <h3>Signal 7: Multi-Year Contract Mix Increases Above 60%</h3>
+                <span class="status-pill status-green">Green — OK</span>
+            </div>
+            <div class="signal-grid">
+                <div>
+                    <div class="signal-field-label">What it means if observed</div>
+                    <div class="signal-field-value">
+                        Enterprise customers are committing to longer contract durations (2–3 years) rather than shortening to annual renewals, indicating confidence in long-term product value and reduced churn risk. Increasing multi-year contracts invalidates the thesis that procurement transparency is accelerating annual renewal churn.
+                    </div>
+                </div>
+                <div>
+                    <div class="signal-field-label">Current Status (as of Jan 2026)</div>
+                    <div class="signal-field-value">
+                        Unknown — requires disclosure in MD&A section or supplemental metrics. Not always disclosed; may require investor relations inquiry or proxy from RPO (Remaining Performance Obligation) duration.
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="signal-field-label">What data would prove it</div>
+                <div class="data-track">
+                    Source: 10-K/10-Q "Management Discussion & Analysis" or investor presentation slides<br>
+                    Metric: "Multi-year contract percentage" or average contract duration in months<br>
+                    Proxy metric: Current RPO / Total RPO ratio (higher = longer duration)<br>
+                    Threshold: Multi-year contracts ≥60% of total bookings for 2+ consecutive quarters
+                </div>
+            </div>
+            <div class="signal-grid" style="margin-top: 16px;">
+                <div>
+                    <div class="signal-field-label">Monitoring Cadence</div>
+                    <div class="signal-field-value">
+                        <span class="cadence-badge cadence-quarterly">Quarterly</span> — Review investor presentations for contract metrics
+                    </div>
+                </div>
+                <div>
+                    <div class="signal-field-label">Next Check Date</div>
+                    <div class="signal-field-value">
+                        Q4 FY2025 earnings investor deck (Feb/Mar 2026)
+                    </div>
+                </div>
+            </div>
+            <div class="escalation-threshold">
+                <div class="label">Threshold for Escalation</div>
+                <div class="value">
+                    Red trigger: Multi-year contract mix increases to ≥60% and grows sequentially for 3+ consecutive quarters → invalidates procurement leverage thesis, reassess customer lock-in strength
+                </div>
+            </div>
+        </div>
+
+        <div class="signal-card">
+            <div class="signal-card-header">
+                <h3>Signal 8: Free Cash Flow Exceeds $10B Annually</h3>
+                <span class="status-pill status-green">Green — OK</span>
+            </div>
+            <div class="signal-grid">
+                <div>
+                    <div class="signal-field-label">What it means if observed</div>
+                    <div class="signal-field-value">
+                        Salesforce generates sufficient free cash flow to fund all operations, R&D investment, and capital returns without relying on external capital markets. This level of cash generation provides strategic optionality and eliminates near-term capital constraint risk, invalidating the thesis that competitive pressure forces strategic decisions within 18 months.
+                    </div>
+                </div>
+                <div>
+                    <div class="signal-field-label">Current Status (as of Jan 2026)</div>
+                    <div class="signal-field-value
+</body>
+</html>

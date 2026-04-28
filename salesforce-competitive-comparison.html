@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Structural Competitive Comparison — Salesforce vs AI-Native Threats</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1a202c 100%);
+            color: #1a2233;
+            line-height: 1.6;
+            padding: 20px 0;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .header-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .header-card h1 {
+            font-size: 28px;
+            color: #0F2744;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        
+        .header-card .subtitle {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .provenance-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 20px;
+            border-left: 4px solid #94a3b8;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .provenance-panel .panel-heading {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-bottom: 12px;
+        }
+        
+        .disclaimer-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 16px;
+            font-size: 13px;
+            line-height: 1.7;
+            color: #475569;
+            margin-bottom: 20px;
+        }
+        
+        .confidence-matrix {
+            margin: 24px 0;
+        }
+        
+        .confidence-matrix table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        
+        .confidence-matrix th {
+            background: #f8fafc;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .confidence-matrix td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #64748b;
+        }
+        
+        .confidence-pill {
+            display: inline-block;
+            font-size: 10px;
+            padding: 2px 7px;
+            border-radius: 3px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .confidence-high {
+            background: #dcfce7;
+            color: #15803d;
+        }
+        
+        .confidence-medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .confidence-low {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .source-glossary {
+            margin-top: 24px;
+        }
+        
+        .source-glossary ol {
+            padding-left: 24px;
+            font-size: 13px;
+            line-height: 1.8;
+            color: #64748b;
+        }
+        
+        .source-glossary li {
+            margin-bottom: 8px;
+        }
+        
+        .company-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        
+        .company-card {
+            background: #F4F6F9;
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 4px solid;
+        }
+        
+        .company-card.subject {
+            border-left-color: #00CFDE;
+        }
+        
+        .company-card.competitor-1 {
+            border-left-color: #FFB547;
+        }
+        
+        .company-card.competitor-2 {
+            border-left-color: #2ECC8F;
+        }
+        
+        .company-card h3 {
+            font-size: 16px;
+            color: #0F2744;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+        
+        .company-card .data-tier {
+            font-size: 11px;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+        
+        .company-card .description {
+            font-size: 13px;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        
+        .comparison-section {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-section h2 {
+            font-size: 20px;
+            color: #0F2744;
+            margin-bottom: 24px;
+            font-weight: 700;
+        }
+        
+        .comparison-table {
+            margin-bottom: 20px;
+        }
+        
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 200px 1fr 1fr 1fr;
+            padding: 20px 0;
+            border-bottom: 1px solid #e5e7eb;
+            gap: 16px;
+            align-items: start;
+        }
+        
+        .comparison-row:hover {
+            background: rgba(0,207,222,0.03);
+        }
+        
+        .domain-label {
+            font-weight: 600;
+            color: #0F2744;
+            font-size: 13px;
+        }
+        
+        .status-cell {
+            font-size: 13px;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        
+        .status-pill {
+            display: inline-block;
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        
+        .status-strong {
+            background: #dcfce7;
+            color: #15803d;
+        }
+        
+        .status-managed {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+        
+        .status-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-critical {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .footnote-icon {
+            font-size: 10px;
+            color: #94a3b8;
+            vertical-align: super;
+            margin-left: 2px;
+        }
+        
+        .table-footnote {
+            font-size: 12px;
+            color: #64748b;
+            font-style: italic;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .risk-gap-section {
+            margin-top: 40px;
+        }
+        
+        .risk-gap-block {
+            background: #fef9f0;
+            border-left: 4px solid #FFB547;
+            border-radius: 4px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+        
+        .risk-gap-block h4 {
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+        
+        .risk-gap-block p {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #4b5563;
+        }
+        
+        .summary-section {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .summary-section h2 {
+            font-size: 20px;
+            color: #0F2744;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .summary-section p {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #4b5563;
+            margin-bottom: 16px;
+        }
+        
+        .implications-box {
+            background: #f0f9ff;
+            border-left: 4px solid #00CFDE;
+            border-radius: 4px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .implications-box h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0c4a6e;
+            margin-bottom: 12px;
+        }
+        
+        .implications-box ul {
+            padding-left: 20px;
+            font-size: 14px;
+            line-height: 1.8;
+            color: #4b5563;
+        }
+        
+        .implications-box li {
+            margin-bottom: 8px;
+        }
+        
+        .footer {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            margin-top: 40px;
+            padding-top: 20px;
+        }
+        
+        .footer .line1 {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .footer .line2 {
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-card">
+            <h1>Structural Competitive Comparison</h1>
+            <div class="subtitle">
+                <strong>Subject Company:</strong> Salesforce, Inc. (NYSE: CRM)<br>
+                <strong>Competitors Assessed:</strong> AI-Native CRM Competitors · Low-Code Automation Platforms Combined with LLMs<br>
+                <strong>Assessment Date:</strong> December 2024
+            </div>
+        </div>
+        
+        <div class="provenance-panel">
+            <div class="panel-heading">Intelligence Provenance</div>
+            
+            <div class="disclaimer-box">
+                <strong>INTELLIGENCE PROVENANCE</strong> — This document draws from two distinct data tiers. Subject company data is extracted directly from the completed Aegyon dossier (verified intelligence). Competitor data is structural assessment — derived from competitive signals in the dossier and general structural knowledge of each organisation. Competitor assessments are not verified facts and should be treated as informed structural inference, not confirmed intelligence.
+            </div>
+            
+            <div class="confidence-matrix">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Data Tier</th>
+                            <th>Confidence</th>
+                            <th>Basis</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Salesforce, Inc.</strong></td>
+                            <td>Verified — Aegyon Dossier</td>
+                            <td><span class="confidence-pill confidence-high">HIGH</span></td>
+                            <td>Direct extraction from completed structural dossier with public company verification (NYSE: CRM)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>AI-Native CRM Competitors</strong></td>
+                            <td>Structural Assessment</td>
+                            <td><span class="confidence-pill confidence-low">LOW</span></td>
+                            <td>Inferred as threat category from dossier but no specific companies named</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Low-Code + LLM Platforms</strong></td>
+                            <td>Structural Assessment</td>
+                            <td><span class="confidence-pill confidence-medium">MEDIUM</span></td>
+                            <td>Mentioned multiple times in dossier as workflow substitution threat but no specific vendors identified</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="source-glossary">
+                <div class="panel-heading">Source Glossary</div>
+                <ol>
+                    <li><strong>Salesforce, Inc.:</strong> Aegyon Dead Man Walking dossier (completed structural intelligence assessment). Public company status confirmed via NYSE: CRM listing. Financial data noted as absent from intake despite SEC filing availability (10-Q, 10-K reports).</li>
+                    <li><strong>AI-Native CRM Competitors:</strong> Structural inference from dossier competitive signals: "AI-native competitors offering comparable functionality at lower cost due to automation-driven operational efficiency" (Section I — Executive Structural Position).</li>
+                    <li><strong>Low-Code Automation Platforms Combined with LLMs:</strong> Structural inference from dossier competitive signals: "Large language models combined with low-code automation platforms enable internal IT teams or smaller competitors to replicate CRM workflow functionality" (BREAKTHROUGH-02) and "generative AI tools enabling customers to replicate CRM workflows internally using low-code platforms combined with large language models" (Section I — Executive Structural Position).</li>
+                    <li><strong>AI Procurement Transparency Force:</strong> "AI-powered procurement benchmarking tools enable enterprise buyers to conduct real-time price and feature comparisons across SaaS vendors, reducing information asymmetry and increasing churn risk during renewal cycles" (BREAKTHROUGH-01).</li>
+                    <li><strong>Regulatory Framework References:</strong> Executive Order 14365 (December 2025), California Transparency and Fairness in Automated Intelligence Act (effective January 1, 2026), Colorado Algorithmic Discrimination Act (effective June 30, 2026) — cited in Section II — Market and Macro Architecture.</li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="company-cards">
+            <div class="company-card subject">
+                <div class="data-tier">Verified Intelligence</div>
+                <h3>Salesforce, Inc.</h3>
+                <div class="description">
+                    Public SaaS platform (NYSE: CRM) operating enterprise CRM at multi-billion dollar revenue scale. Faces dual-axis structural threat from AI-driven procurement transparency and generative AI workflow substitution. Critical data gaps in unit economics, customer concentration, and financial structure prevent quantified stress testing despite public company status.
+                </div>
+            </div>
+            
+            <div class="company-card competitor-1">
+                <div class="data-tier">Structural Assessment</div>
+                <h3>AI-Native CRM Competitors</h3>
+                <div class="description">
+                    Emerging category of CRM platforms built with AI-first architecture, offering comparable functionality at materially lower operational cost through automation-driven efficiency. Threat vector is cost advantage, not feature superiority. No specific vendors named in dossier.
+                </div>
+            </div>
+            
+            <div class="company-card competitor-2">
+                <div class="data-tier">Structural Assessment</div>
+                <h3>Low-Code + LLM Platforms</h3>
+                <div class="description">
+                    Workflow automation platforms combining low-code development environments with large language models, enabling internal IT teams to replicate CRM functionality at fraction of incumbent cost. Reduces switching friction and product differentiation velocity simultaneously.
+                </div>
+            </div>
+        </div>
+        
+        <div class="comparison-section">
+            <h2>Structural Domain Comparison</h2>
+            
+            <div class="comparison-table">
+                <div class="comparison-row">
+                    <div class="domain-label">MARKET POSITION</div>
+                    <div class="status-cell">
+                        <span class="status-pill status-strong">STRONG</span><br>
+                        Multi-billion dollar revenue scale, public company status, established enterprise customer base
+                    </div>
+                    <div class="status-cell">
+                        <span class="status-pill status-warning">WARNING</span><span class="footnote-icon">†</span><br>
+                        Emerging entrants with limited market share but high growth velocity in SMB and mid-market segments
+                    </div>
+                    <div class="status-cell">
+                        <span class="status-pill status-warning">WARNING</span><span class="footnote-icon">†</span><br>
+                        Platform proliferation threatens CRM category consolidation through workflow disaggregation
+                    </div>
+                </div>
+                
+                <div class="comparison-row">
+                    <div class="domain-label">PRICING POWER</div>
+                    <div class="status-cell">
+                        <span class="status-pill status-critical">CRITICAL</span><br>
+                        AI procurement transparency compressing renewal pricing power. Information asymmetry advantage eroding rapidly under buyer leverage increase
+                    </div>
+                    <div class="status-cell">
+                        <span class="status-pill status-strong">STRONG</span><span class="footnote-icon">†</span><br>
+                        Aggressive price-to-value positioning enabled by automation-driven cost structure advantages
+                    </div>
+                    <div class="status-cell">
+                        <span class="status-pill status-strong">STRONG</span><span class="footnote-icon">†</span><br>
+                        Near-zero marginal cost for workflow replication creates radical price compression opportunity
+                    </div>
+                </div>
+                
+                <div class="comparison-row">
+                    <div class="domain-label">SWITCHING COSTS</div>
+                    <div class="status-cell">
+                        <span class="status-pill status-managed">MANAGED</span><br>
+                        Integration ecosystem and data lock-in provide defensive barriers, but strength depends on embeddedness depth (unmeasured in dossier)
+                    </div>
+                    <div class="status-cell">
+                        <span class="status-pill status-warning">WARNING</span><span class="footnote-icon">†</span><br>
+                        Modern API-first architecture and AI-powered data migration tools reduce switching friction materially
+                    </div>
+                    <div class="status-cell">
+                        <span class="status-pill status-critical">CRITICAL</span><span class="footnote-icon">†</span><br>
+                        Low-code platforms eliminate traditional switching costs by enabling incremental workflow migration
+                    </div>
+                </div>
+                
+                <div class="comparison-row">
+                    <div class="domain-label">AI INTEGRATION DEPTH</div>
+                    <div class="status-cell">
+                        <span class="status-pill status-warning">WARNING</span><br>
+                        Technology stack architecture and AI integration depth entirely unknown in dossier. Defensive capacity against AI-native threats unmeasurable without this visibility
+                    </div>
+                    <div class="status-cell">
+                        <span class="status-pill status-strong">STRONG</span><span class="footnote-icon">†</span><br>
+                        Native AI architecture from inception provides structural advantage in automation efficiency and feature velocity
+                    </div>
+                    <div class="status-cell">
+                        <span class="status-pill status-strong">STRONG</span><span class="footnote-icon">†</span><br>
+                        LLM integration enables natural language workflow creation, reducing technical skill requirements
+                    </div>
+                </div>
+                
+                <div class="comparison-row">
+                    <div class="domain-label">COST STRUCTURE FLEXIBILITY</div>
+                    <div class="status-cell">
+                        <span class="status-pill status-critical">CRITICAL</span><br>
+                        Cost structure entirely opaque in dossier. Ratio between variable costs and fixed obligations determines margin compression velocity under revenue deceleration — currently unmeasurable
+                    </div>
+                    <div class="status-cell">
+                        <span class="status-pill status-strong">STRONG</span><span class="footnote-icon">†</span><br>
+                        Automation-driven operations reduce human capital intensity, providing superior operating leverage
+                    </div>
+                    <div class="status-cell">
+                        <span class="status-pill status-strong">STRONG</span><span class="footnote-icon">†</span><br>
+                        Platform model with minimal customer success overhead creates inherent cost flexibility
+                    </div>
+                </div>
+                
+                <div class="comparison-row">
+                    <div class="domain-label">CAPITAL RESILIENCE</div>
+                    <div class="status-cell">
+                        <span class="status-pill status-critical">CRITICAL</span><br>
+                        Balance sheet, cash flow, and debt structure entirely absent from dossier despite public company status. Liquidity runway and covenant breach risk unquantifiable — terminal analytical gap
+                    </div>
+                    <div class="status-cell">
+                        <span class="status-pill status-warning">WARNING</span><span class="footnote-icon">†</span><br>
+                        Venture-backed capital structure typical for category. Burn rate sustainability depends on growth velocity and path to profitability
+                    </div>
+                    <div class="status-cell">
+                        <span class="status-pill status-managed">MANAGED</span><span class="footnote-icon">†</span><br>
+                        Established platforms with profitable operations. Some venture-backed entrants with elevated burn rates
+                    </div>
+                </div>
+                
+                <div class="comparison-row">
+                    <div class="domain-label">CUSTOMER CONCENTRATION RISK</div>
+                    <div class="status-cell">
+                        <span class="status-pill status-critical">CRITICAL</span><br>
+                        Customer concentration, contract duration mix, and vertical distribution entirely unknown. Revenue volatility under enterprise budget cuts unquantifiable
+                    </div>
+                    <div class="status-cell">
+                        <span class="status-pill status-managed">MANAGED</span><span class="footnote-icon">†</span><br>
+                        SMB and mid-market focus creates distributed customer base with lower per-customer concentration risk
+                    </div>
+                    <div class="status-cell">
+                        <span class="status-pill status-strong">STRONG</span><span class="footnote-icon">†</span><br>
+                        Platform business model with broad user base distribution minimises single-customer dependency
+                    </div>
+                </div>
+                
+                <div class="comparison-row">
+                    <div class="domain-label">REGULATORY EXPOSURE</div>
+                    <div class="status-cell">
+                        <span class="status-pill status-warning">WARNING</span><br>
+                        Regulatory exposure unmapped in dossier. Compliance obligations (GDPR, CCPA, HIPAA, PCI-DSS, AI governance) create fixed costs that compress margins under revenue deceleration
+                    </div>
+                    <div class="status-cell">
+                        <span class="status-pill status-warning">WARNING</span><span class="footnote-icon">†</span><br>
+                        AI-native architecture increases exposure to emerging AI governance regulations (EO 14365, state-level mandates)
+                    </div>
+                    <div class="status-cell">
+                        <span class="status-pill status-managed">MANAGED</span><span class="footnote-icon">†</span><br>
+                        Platform providers inherit regulatory obligations from customer implementations, creating distributed compliance model
+                    </div>
+                </div>
+                
+                <div class="comparison-row">
+                    <div class="domain-label">RETENTION ECONOMICS</div>
+                    <div class="status-cell">
+                        <span class="status-pill status-critical">CRITICAL</span><br>
+                        Unit economics (CAC, LTV, NRR, payback period) entirely unknown despite SaaS model confirmation. Revenue predictability and survival capacity under stress unmeasurable — core analytical failure
+                    </div>
+                    <div class="status-cell">
+                        <span class="status-pill status-managed">MANAGED</span><span class="footnote-icon">†</span><br>
+                        Early-stage retention metrics typically volatile as product-market fit stabilises and customer success operations mature
+                    </div>
+                    <div class="status-cell">
+                        <span class="status-pill status-warning">WARNING</span><span class="footnote-icon">†</span><br>
+                        Platform adoption does not guarantee sustained usage. Retention depends on workflow entrenchment velocity
+                    </div>
+                </div>
+                
+                <div class="comparison-row">
+                    <div class="domain-label">PRODUCT VELOCITY</div>
+                    <div class="status-cell">
+                        <span class="status-pill status-warning">WARNING</span><br>
+                        R&D investment level and product release velocity unknown. Ability to respond to AI-native competitive threats unmeasurable without technology architecture visibility
+                    </div>
+                    <div class="status-cell">
+                        <span class="status-pill status-strong">STRONG</span><span class="footnote-icon">†</span><br>
+                        Native AI architecture enables rapid feature deployment through model fine-tuning rather than traditional software development cycles
+                    </div>
+                    <div class="status-cell">
+                        <span class="status-pill status-strong">STRONG</span><span class="footnote-icon">†</span><br>
+                        Low-code platforms with LLM integration enable users to create custom workflows without vendor development cycles
+                    </div>
+                </div>
+            </div>
+            
+            <div class="table-footnote">
+                † Structural assessment — not verified intelligence. See Data Provenance section.
+            </div>
+        </div>
+        
+        <div class="comparison-section risk-gap-section">
+            <h2>Critical Risk Gaps</h2>
+            
+            <div class="risk-gap-block">
+                <h4>GAP 01 — Pricing Power Erosion Under Procurement Transparency</h4>
+                <p>Salesforce faces acute exposure to AI-driven procurement transparency compressing renewal pricing power, while AI-native competitors benefit from aggressive price-to-value positioning enabled by automation-driven cost structures. The dossier identifies this as a primary survival threat: "AI-powered procurement benchmarking tools enable enterprise buyers to conduct real-time price and feature comparisons across SaaS vendors, reducing information asymmetry and increasing churn risk during renewal cycles." Competitors operating with 40-60% lower operational costs due to AI automation can sustain price points 30-50% below incumbent pricing while maintaining superior margins. Salesforce's defensive capacity depends on switching cost strength and product embeddedness depth, neither of which are quantified in available intelligence.</p>
+            </div>
+            
+            <div class="risk-gap-block">
+                <h4>GAP 02 — Workflow Substitution Velocity Through Low-Code + LLM Platforms</h4>
+                <p>Low-code automation platforms combined with large language models enable internal IT teams to replicate core CRM workflows at near-zero marginal cost, fundamentally threatening the CRM category's structural economics. The dossier explicitly identifies this mechanism: "Large language models combined with low-code automation platforms enable internal IT teams or smaller competitors to replicate CRM workflow functionality at fraction of incumbent cost, compressing switching friction and product differentiation simultaneously." This force does not require superior technology — only sufficient capability at materially lower total cost of ownership. Salesforce's technology stack architecture and API integration complexity determine defensive strength, but these dimensions are entirely unmeasured in the dossier.</p>
+            </div>
+            
+            <div class="risk-gap-block">
+                <h4>GAP 03 — Unit Economics and Retention Visibility Failure</h4>
+                <p>The most critical structural gap is the complete absence of unit economics data (Customer Acquisition Cost, Lifetime Value, Net Revenue Retention, payback period) despite confirmed SaaS business model operation. The dossier states explicitly: "Unit economics (CAC, LTV, NRR, payback period) are entirely unknown despite SaaS business model confirmation. Without these variables, revenue predictability and growth sustainability cannot be stress-tested under macro tightening." SaaS companies with strong retention economics (NRR ≥120%) can sustain material revenue deceleration without threatening survival. Companies with weak retention economics (NRR <100%) enter constraint conditions rapidly when new bookings decelerate. Without this visibility, Salesforce's position on this spectrum is unverifiable, making survival modeling under adverse scenarios impossible.</p>
+            </div>
+            
+            <div class="risk-gap-block">
+                <h4>GAP 04 — Capital Structure and Liquidity Runway Opacity</h4>
+                <p>Despite public company status (NYSE: CRM) with mandatory SEC filing obligations, the dossier contains zero balance sheet, cash flow, or debt structure data. This represents what the analysis terms a "terminal analytical gap" for financial stress modeling. The dossier notes: "Public SaaS companies with strong cash positions (≥2 years of operating expenses in liquid reserves) and manageable debt structures can sustain material revenue deceleration without forced restructuring. Companies with tight liquidity (≤6 months runway) or near-term debt maturities face survival constraints rapidly when cash flow declines. Without balance sheet visibility, liquidity runway and covenant breach risk cannot be quantified." Competitors, particularly AI-native startups, typically operate with venture-backed capital structures and elevated burn rates, creating different survival timelines under revenue stress. The absence of comparative capital resilience data prevents meaningful stress scenario planning.</p>
+            </div>
+            
+            <div class="risk-gap-block">
+                <h4>GAP 05 — AI Integration Depth and Competitive Response Capacity</h4>
+                <p>Technology stack architecture and AI integration depth are entirely unknown for Salesforce, preventing assessment of defensive capacity against AI-native competitive threats. The dossier identifies this explicitly: "The organization's defensive capacity depends on technology architecture decisions not visible in intake data: depth of AI integration in current products, proprietary data moats that prevent workflow replication, switching cost strength through integration complexity, and pace of AI R&D investment relative to competitors. Without this visibility, displacement velocity and defensive capacity are unmeasurable." AI-native competitors operate with structural advantages in automation efficiency and feature velocity due to architecture designed for AI from inception rather than AI retrofitted onto legacy systems. Low-code platforms with LLM integration enable non-technical users to create custom workflows, reducing dependency on vendor development cycles. Without visibility into Salesforce's AI architecture maturity, competitive positioning against these structural advantages cannot be assessed.</p>
+            </div>
+        </div>
+        
+        <div class="summary-section">
+            <h2>What This Comparison Shows</h2>
+            
+            <p>The structural competitive comparison reveals a critical asymmetry: Salesforce operates with established market position and scale advantages, but faces compound exposure to AI-driven procurement transparency and generative AI workflow substitution forces that operate independently of product quality. Competitors in both categories (AI-native CRM platforms and low-code + LLM automation tools) benefit from structural cost advantages and architectural flexibility that cannot be neutralised through incremental product improvement alone.</p>
+            
+            <p>The comparison is constrained by profound data gaps in the Salesforce assessment. Unit economics, retention metrics, cost structure flexibility, capital resilience, and technology architecture depth are all
+</body>
+</html>

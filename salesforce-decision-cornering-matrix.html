@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decision Cornering Matrix — Salesforce, Inc.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0F2744;
+            --primary-light: #1B3A67;
+            --accent: #00CFDE;
+            --accent-dark: #00A8B8;
+            --critical: #FF4D6A;
+            --warning: #FFB547;
+            --success: #2ECC8F;
+            --border: #DDE3ED;
+            --text-dark: #1a2233;
+            --text-light: #5a6a82;
+            --text-muted: #8899aa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #F4F6F9;
+            font-family: 'DM Sans', system-ui, sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        header .subtitle {
+            font-size: 16px;
+            opacity: 0.75;
+            font-weight: 500;
+        }
+
+        header .metadata {
+            font-size: 13px;
+            opacity: 0.5;
+            margin-top: 20px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .intro-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin: 30px 0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            text-align: center;
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--text-light);
+        }
+
+        .decision-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin: 30px 0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+
+        .decision-card h2 {
+            color: var(--primary);
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            font-family: 'Barlow Condensed', sans-serif;
+            letter-spacing: 0.3px;
+        }
+
+        .choice-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .choice-col {
+            padding: 28px;
+        }
+
+        .choice-col:first-child {
+            border-right: 1px solid var(--border);
+        }
+
+        .choice-label {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--primary);
+            margin-bottom: 6px;
+        }
+
+        .choice-desc {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 16px;
+        }
+
+        .consequences {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .consequences li {
+            font-size: 13px;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            color: var(--text-light);
+        }
+
+        .consequences li:last-child {
+            border-bottom: none;
+        }
+
+        .consequences li .bullet {
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .bullet.runway { color: var(--warning); }
+        .bullet.capital { color: var(--critical); }
+        .bullet.competitive { color: var(--accent); }
+        .bullet.regulatory { color: var(--critical); }
+        .bullet.operational { color: var(--text-muted); }
+        .bullet.optionality { color: var(--success); }
+
+        .time-sensitivity {
+            margin-top: 20px;
+            font-style: italic;
+            font-size: 12px;
+            color: var(--text-muted);
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .summary-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-top: 40px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+
+        .summary-card h2 {
+            color: var(--primary);
+            margin-bottom: 16px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .summary-card p {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--text-light);
+            margin-bottom: 12px;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 12px;
+            margin: 40px 0 20px;
+            line-height: 1.6;
+        }
+
+        footer div:first-child {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 40px 20px;
+            }
+
+            header h1 {
+                font-size: 24px;
+            }
+
+            .choice-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .choice-col:first-child {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .decision-card {
+                padding: 24px;
+            }
+
+            .intro-card, .summary-card {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Decision Cornering Matrix — Salesforce, Inc.</h1>
+        <div class="subtitle">Force clarity. Remove deferral.</div>
+        <div class="metadata">Generated: December 2025</div>
+    </header>
+
+    <div class="container">
+        <div class="intro-card">
+            This matrix forces binary choice on critical decision points identified in the structural dossier. Each decision presents two paths with explicit consequences mapped to runway impact, capital requirements, competitive posture, regulatory exposure, operational load, and strategic optionality. Deferral on these decisions creates cost — either by compressing time-to-constraint or by eliminating future strategic moves. The purpose is clarity, not comfort.
+        </div>
+
+        <div class="decision-card">
+            <h2>Decision 1: Financial Transparency Posture</h2>
+            <div class="choice-grid">
+                <div class="choice-col">
+                    <div class="choice-label">Choice A: Commission Full Financial Audit</div>
+                    <div class="choice-desc">Acquire and integrate all SEC filings (10-K, 10-Q) into strategic analysis — balance sheet, cash flow, debt structure, unit economics.</div>
+                    <ul class="consequences">
+                        <li><span class="bullet runway">◆</span> <span>Runway: Enables quantified stress scenario modeling under revenue deceleration (0–24 month horizon visibility)</span></li>
+                        <li><span class="bullet capital">◆</span> <span>Capital: Reveals liquidity position, covenant breach risk, and refinancing exposure (critical if <6 months runway)</span></li>
+                        <li><span class="bullet competitive">◆</span> <span>Competitive: Exposes margin structure needed to assess price competition sustainability against AI-native entrants</span></li>
+                        <li><span class="bullet optionality">◆</span> <span>Optionality: Unlocks M&A positioning assessment (consolidator vs target status) and capital raise timing decisions</span></li>
+                        <li><span class="bullet operational">◆</span> <span>Operational: Requires 40–60 hours financial analysis work; increases decision surface complexity</span></li>
+                    </ul>
+                    <div class="time-sensitivity">⏱ Time sensitivity: If revenue deceleration is occurring now, analysis delay compresses response window. Financial data is publicly available — delay cost is pure analytical friction.</div>
+                </div>
+                <div class="choice-col">
+                    <div class="choice-label">Choice B: Operate on Available Data</div>
+                    <div class="choice-desc">Continue strategic planning without balance sheet, cash flow, or unit economics visibility.</div>
+                    <ul class="consequences">
+                        <li><span class="bullet runway">◆</span> <span>Runway: Cannot model survival capacity under adverse scenarios; risk of constraint surprise within 6–12 months</span></li>
+                        <li><span class="bullet capital">◆</span> <span>Capital: Liquidity position unknown; potential forced financing at distressed terms if cash depletes unexpectedly</span></li>
+                        <li><span class="bullet competitive">◆</span> <span>Competitive: Margin compression velocity unmeasurable; price competition response capacity unknown</span></li>
+                        <li><span class="bullet optionality">◆</span> <span>Optionality: Eliminates debt restructuring, M&A timing, and capital allocation optimization as strategic levers</span></li>
+                        <li><span class="bullet operational">◆</span> <span>Operational: Simpler near-term (no financial analysis workload); increases long-term strategic blindness</span></li>
+                    </ul>
+                    <div class="time-sensitivity">⏱ Time sensitivity: Deferral becomes costly when revenue trends turn negative or covenant breach approaches without visibility. Public company status means data exists — choice is whether to use it.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="decision-card">
+            <h2>Decision 2: AI Defensive Architecture Investment</h2>
+            <div class="choice-grid">
+                <div class="choice-col">
+                    <div class="choice-label">Choice A: Accelerate AI Integration & Proprietary Moat</div>
+                    <div class="choice-desc">Commit capital to deep AI feature integration, proprietary data moats, and switching cost reinforcement to defend against workflow replication.</div>
+                    <ul class="consequences">
+                        <li><span class="bullet capital">◆</span> <span>Capital: Requires material R&D investment (typically 20–30% of revenue for SaaS); may compress near-term profitability</span></li>
+                        <li><span class="bullet competitive">◆</span> <span>Competitive: Increases differentiation velocity vs AI-native startups and low-code workflow replication threats</span></li>
+                        <li><span class="bullet runway">◆</span> <span>Runway: Investment cost reduces cash runway if not funded by revenue growth; creates 12–18 month payback lag</span></li>
+                        <li><span class="bullet optionality">◆</span> <span>Optionality: Preserves premium pricing power and enterprise customer retention during AI transition cycle</span></li>
+                        <li><span class="bullet operational">◆</span> <span>Operational: Increases technology complexity; requires AI talent acquisition in competitive labor market</span></li>
+                    </ul>
+                    <div class="time-sensitivity">⏱ Time sensitivity: AI-native competitors are building now. 12–18 month development lag means deferral beyond Q1 2026 creates unrecoverable competitive gap by 2027.</div>
+                </div>
+                <div class="choice-col">
+                    <div class="choice-label">Choice B: Maintain Current Product Velocity</div>
+                    <div class="choice-desc">Continue existing product roadmap without material AI acceleration investment; defend through sales execution and customer relationships.</div>
+                    <ul class="consequences">
+                        <li><span class="bullet capital">◆</span> <span>Capital: Preserves near-term cash flow and profitability; avoids R&D investment risk</span></li>
+                        <li><span class="bullet competitive">◆</span> <span>Competitive: Differentiation gap vs AI-native alternatives widens; vulnerable to workflow replication by low-code + LLM combinations</span></li>
+                        <li><span class="bullet runway">◆</span> <span>Runway: Near-term runway preserved; long-term runway compressed if churn accelerates due to AI substitution (18–24 month lag)</span></li>
+                        <li><span class="bullet optionality">◆</span> <span>Optionality: Eliminates premium pricing defense; forces eventual price competition or market share loss</span></li>
+                        <li><span class="bullet operational">◆</span> <span>Operational: Simpler execution (no major technology pivot); increases sales team burden to defend renewals</span></li>
+                    </ul>
+                    <div class="time-sensitivity">⏱ Time sensitivity: Becomes irreversible when competitors achieve AI feature parity. Customer evaluation cycles are 6–12 months — deferral past mid-2026 risks material churn in 2027 renewal cohorts.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="decision-card">
+            <h2>Decision 3: Unit Economics Diagnostic Priority</h2>
+            <div class="choice-grid">
+                <div class="choice-col">
+                    <div class="choice-label">Choice A: Execute Immediate Unit Economics Audit</div>
+                    <div class="choice-desc">Measure and model CAC, LTV, NRR, payback period, and gross retention across customer cohorts to quantify retention strength under procurement pressure.</div>
+                    <ul class="consequences">
+                        <li><span class="bullet runway">◆</span> <span>Runway: Enables quantified churn risk modeling; identifies at-risk cohorts for proactive retention intervention</span></li>
+                        <li><span class="bullet capital">◆</span> <span>Capital: Reveals whether business can self-fund through retention economics or requires external capital under growth deceleration</span></li>
+                        <li><span class="bullet competitive">◆</span> <span>Competitive: Exposes pricing elasticity and competitive displacement velocity; informs price defense vs market share strategy</span></li>
+                        <li><span class="bullet optionality">◆</span> <span>Optionality: Unlocks targeted customer segmentation, retention playbooks, and cohort-specific intervention strategies</span></li>
+                        <li><span class="bullet operational">◆</span> <span>Operational: Requires cross-functional data integration (finance, sales, CS); 60–90 day analysis cycle</span></li>
+                    </ul>
+                    <div class="time-sensitivity">⏱ Time sensitivity: If NRR is <100%, organization is already in constraint and needs immediate intervention. If NRR is >120%, deferral is low-cost. Without measurement, risk posture is unknown — gambling position.</div>
+                </div>
+                <div class="choice-col">
+                    <div class="choice-label">Choice B: Continue Without Unit Economics Visibility</div>
+                    <div class="choice-desc">Manage customer retention through qualitative signals and renewal tracking without cohort-level economic modeling.</div>
+                    <ul class="consequences">
+                        <li><span class="bullet runway">◆</span> <span>Runway: Churn risk unquantified; potential for sudden revenue decline without early warning system (6–12 month lag on recognition)</span></li>
+                        <li><span class="bullet capital">◆</span> <span>Capital: Cannot model self-funding capacity; risk of unexpected capital need when retention deteriorates</span></li>
+                        <li><span class="bullet competitive">◆</span> <span>Competitive: Pricing strategy operates without elasticity data; vulnerable to competitive undercutting without response calibration</span></li>
+                        <li><span class="bullet optionality">◆</span> <span>Optionality: Eliminates proactive cohort intervention; limits strategy to reactive firefighting on large customer losses</span></li>
+                        <li><span class="bullet operational">◆</span> <span>Operational: Simpler near-term (no major analytical project); increases customer success team burden without targeting data</span></li>
+                    </ul>
+                    <div class="time-sensitivity">⏱ Time sensitivity: Becomes costly when macro conditions tighten and procurement pressure increases. Leading indicator is enterprise IT budget cut announcements — if occurring now, measurement delay compresses intervention window to <90 days.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="decision-card">
+            <h2>Decision 4: Competitive Intelligence & Market Position Mapping</h2>
+            <div class="choice-grid">
+                <div class="choice-col">
+                    <div class="choice-label">Choice A: Commission Competitive Field Analysis</div>
+                    <div class="choice-desc">Map named competitors, market share, win/loss dynamics, tier positioning, and AI-native entrant threat velocity.</div>
+                    <ul class="consequences">
+                        <li><span class="bullet competitive">◆</span> <span>Competitive: Enables strategic response calibration to specific threats; identifies white space and consolidation opportunities</span></li>
+                        <li><span class="bullet runway">◆</span> <span>Runway: Reveals displacement velocity; quantifies time horizon for competitive response before market share loss accelerates</span></li>
+                        <li><span class="bullet optionality">◆</span> <span>Optionality: Unlocks M&A target identification, partnership strategy, and vertical specialization pivots</span></li>
+                        <li><span class="bullet capital">◆</span> <span>Capital: Informs pricing power sustainability; determines whether premium positioning is defensible or compression inevitable</span></li>
+                        <li><span class="bullet operational">◆</span> <span>Operational: Requires market research investment and ongoing monitoring infrastructure (ongoing operational cost)</span></li>
+                    </ul>
+                    <div class="time-sensitivity">⏱ Time sensitivity: If AI-native competitors are gaining enterprise traction now, analysis delay allows foothold establishment. Sales cycle length is 6–12 months — competitor progress made in 2026 affects 2027 revenue cohorts.</div>
+                </div>
+                <div class="choice-col">
+                    <div class="choice-label">Choice B: Operate Without Competitive Field Visibility</div>
+                    <div class="choice-desc">Focus on product execution and customer retention without systematic competitive intelligence.</div>
+                    <ul class="consequences">
+                        <li><span class="bullet competitive">◆</span> <span>Competitive: Displacement risk unquantified; reactive posture to competitive threats without early warning system</span></li>
+                        <li><span class="bullet runway">◆</span> <span>Runway: Cannot model market share erosion velocity; risk of sudden revenue impact when competitive losses concentrate</span></li>
+                        <li><span class="bullet optionality">◆</span> <span>Optionality: Eliminates proactive M&A, partnership, and strategic pivot opportunities based on competitive gap analysis</span></li>
+                        <li><span class="bullet capital">◆</span> <span>Capital: Pricing strategy operates without competitive context; vulnerable to margin compression without visibility into market dynamics</span></li>
+                        <li><span class="bullet operational">◆</span> <span>Operational: Simpler execution (no competitive intelligence function); increases sales team uncertainty during customer evaluations</span></li>
+                    </ul>
+                    <div class="time-sensitivity">⏱ Time sensitivity: Deferral becomes irreversible when market position erodes beyond recovery threshold. For SaaS platforms, >20% market share loss triggers network effect reversal — creates accelerating decline.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="decision-card">
+            <h2>Decision 5: Regulatory Compliance & AI Governance Investment</h2>
+            <div class="choice-grid">
+                <div class="choice-col">
+                    <div class="choice-label">Choice A: Proactive Compliance Architecture Build</div>
+                    <div class="choice-desc">Invest in AI governance infrastructure, bias auditing, impact assessments, and multi-jurisdiction compliance ahead of enforcement escalation.</div>
+                    <ul class="consequences">
+                        <li><span class="bullet regulatory">◆</span> <span>Regulatory: Reduces enforcement risk and operational disruption when California (Jan 2026) and Colorado (Jun 2026) AI laws take effect</span></li>
+                        <li><span class="bullet capital">◆</span> <span>Capital: Requires compliance infrastructure investment (legal, technical, operational); 15–25% increase in compliance cost base</span></li>
+                        <li><span class="bullet competitive">◆</span> <span>Competitive: Early compliance creates sales advantage in regulated industries (financial services, healthcare); differentiation vs non-compliant competitors</span></li>
+                        <li><span class="bullet runway">◆</span> <span>Runway: Investment cost compresses near-term runway; avoids potential enforcement penalties and remediation costs (2–4x proactive cost)</span></li>
+                        <li><span class="bullet operational">◆</span> <span>Operational: Increases process complexity; requires cross-functional governance structure and ongoing monitoring workload</span></li>
+                    </ul>
+                    <div class="time-sensitivity">⏱ Time sensitivity: California law effective Jan 1, 2026. Implementation requires 6–9 months. Deferral past Q1 2026 creates non-compliance exposure during Q3–Q4 2026 enforcement ramp.</div>
+                </div>
+                <div class="choice-col">
+                    <div class="choice-label">Choice B: Reactive Compliance Minimum</div>
+                    <div class="choice-desc">Implement compliance measures only when regulatory enforcement actions or customer requirements force investment.</div>
+                    <ul class="consequences">
+                        <li><span class="bullet regulatory">◆</span> <span>Regulatory: Exposure to enforcement actions, penalties, and operational restrictions when AI governance laws activate in 2026</span></li>
+                        <li><span class="bullet capital">◆</span> <span>Capital: Preserves near-term cash; risk of concentrated remediation cost (2–4x proactive investment) when enforcement occurs</span></li>
+                        <li><span class="bullet competitive">◆</span> <span>Competitive: Loses differentiation in regulated verticals; vulnerable to compliance-focused competitor messaging during sales cycles</span></li>
+                        <li><span class="bullet runway">◆</span> <span>Runway: Near-term runway preserved; potential for sudden enforcement cost or operational restriction compressing runway in 2026–2027</span></li>
+                        <li><span class="bullet operational">◆</span> <span>Operational: Simpler near-term operations; risk of forced emergency compliance buildout under regulatory deadline pressure</span></li>
+                    </ul>
+                    <div class="time-sensitivity">⏱ Time sensitivity: Becomes irreversible when enforcement action occurs or major customer demands compliance certification. Remediation under deadline pressure costs 2–4x proactive investment and creates customer confidence risk.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="decision-card">
+            <h2>Decision 6: Customer Concentration & Contract Structure Diagnostic</h2>
+            <div class="choice-grid">
+                <div class="choice-col">
+                    <div class="choice-label">Choice A: Execute Concentration Risk Assessment</div>
+                    <div class="choice-desc">Map customer concentration (top 10/20 revenue %), contract duration distribution, vertical exposure, and single-customer loss impact scenarios.</div>
+                    <ul class="consequences">
+                        <li><span class="bullet runway">◆</span> <span>Runway: Quantifies single-customer loss impact; enables proactive retention intervention on high-concentration accounts</span></li>
+                        <li><span class="bullet capital">◆</span> <span>Capital: Reveals revenue predictability (multi-year contracts vs annual); informs capital planning and covenant compliance modeling</span></li>
+                        <li><span class="bullet competitive">◆</span> <span>Competitive: Identifies vertical concentration risk (e.g., financial services sector cuts); enables diversification strategy before concentration becomes fatal</span></li>
+                        <li><span class="bullet optionality">◆</span> <span>Optionality: Unlocks vertical expansion, customer diversification, and contract term optimization strategies</span></li>
+                        <li><span class="bullet operational">◆</span> <span>Operational: Requires CRM data integration and contract database analysis; 30–45 day analytical cycle</span></li>
+                    </ul>
+                    <div class="time-sensitivity">⏱ Time sensitivity: If top 10 customers represent >40% revenue, single loss creates survival constraint. Unknown concentration = unknown risk exposure. Measurement delay defers intervention on at-risk high-value accounts.</div>
+                </div>
+                <div class="choice-col">
+                    <div class="choice-label">Choice B: Manage Without Concentration Visibility</div>
+                    <div class="choice-desc">Continue revenue management without quantified concentration metrics or contract structure analysis.</div>
+                    <ul class="consequences">
+                        <li><span class="bullet runway">◆</span> <span>Runway: Unquantified single-customer loss risk; potential for sudden material revenue decline without early warning (single quarter impact)</span></li>
+                        <li><span class="bullet capital">◆</span> <span>Capital: Revenue predictability unknown; risk of covenant breach or capital shortfall when concentrated customer churns</span></li>
+                        <li><span class="bullet competitive">◆</span> <span>Competitive: Vertical concentration risk unmeasured; vulnerable to sector-specific downturns without diversification buffer</span></li>
+                        <li><span class="bullet optionality">◆</span> <span>Optionality: Eliminates proactive diversification and contract optimization strategies; limits response to reactive account recovery</span></li>
+                        <li><span class="bullet operational">◆</span> <span>Operational: Simpler near-term (no analytical project); increases customer success team uncertainty about retention priorities</span></li>
+                    </ul>
+                    <div class="time-sensitivity">⏱ Time sensitivity: Deferral becomes costly when concentrated customer enters renewal negotiation or budget reduction cycle. Enterprise renewal cycles are 6–12 months — concentration measurement delay compresses intervention window.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="decision-card">
+            <h2>Decision 7: Cost Structure Flexibility & Operating Leverage Analysis</h2>
+            <div class="choice-grid">
+                <div class="choice-col">
+                    <div class="choice-label">Choice A: Map Cost Structure & Build Flexibility Scenarios</div>
+                    <div class="choice-desc">Classify costs as fixed vs variable, model margin compression under revenue deceleration scenarios, and identify cost reduction levers.</div>
+                    <ul class="consequences">
+                        <li><span class="bullet runway">◆</span> <span>Runway: Quantifies margin compression velocity under adverse scenarios; enables proactive cost reduction before constraint forces layoffs</span></li>
+                        <li><span class="bullet capital">◆</span> <span>Capital: Reveals operating leverage; determines whether profitability is sustainable under revenue growth deceleration</span></li>
+                        <li><span class="bullet competitive">◆</span> <span>Competitive: Identifies cost structure vs competitors; informs pricing strategy and margin defense capacity during price competition</span></li>
+                        <li><span class="bullet optionality">◆</span> <span>Optionality: Preserves voluntary cost reduction timing; avoids forced restructuring under distressed conditions (retains talent and customer confidence)</span></li>
+                        <li><span class="bullet operational">◆</span> <span>Operational: Requires finance and department head collaboration; creates cost transparency and accountability infrastructure</span></li>
+                    </ul>
+                    <div class="time-sensitivity">⏱ Time sensitivity: If revenue growth is decelerating now, cost structure analysis delay compresses margin. SaaS companies with high fixed costs see rapid margin deterioration when growth slows — 3–6 month delay eliminates voluntary adjustment window.</div>
+                </div>
+                <div class="choice-col">
+                    <div class="choice-label">Choice B: Operate Without Cost Structure Modeling</div>
+                    <div class="choice-desc">Manage costs through departmental budgets without margin compression scenario modeling or flexibility assessment.</div>
+                    <ul class="consequences">
+                        <li><span class="bullet runway">◆</span> <span>Runway: Margin compression velocity unknown; risk of sudden cash constraint when fixed costs exceed revenue decline expectations</span></li>
+                        <li><span class="bullet capital">◆</span> <span>Capital: Operating leverage unmeasured; potential for unexpected capital need when profitability deteriorates faster than projected</span></li>
+                        <li><span class="bullet competitive">◆</span> <span>Competitive: Cost position vs competitors unknown; vulnerable to price competition without margin defense visibility</span></li>
+                        <li><span class="bullet optionality">◆</span> <span>Optionality: Eliminates proactive cost optimization; forces reactive layoffs and restructuring when constraint binds (destroys talent and customer confidence)</span></li>
+                        <li><span class="bullet operational">◆</span> <span>Operational: Simpler near-term budget management; increases risk of emergency restructuring under compressed timeline</span></li>
+                    </ul>
+                    <div class="time-sensitivity">⏱ Time sensitivity: Becomes irreversible when cash constraint forces emergency cost reduction. Forced layoffs damage culture, customer relationships, and competitive positioning — cost is 3–5x voluntary optimization.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <h2>What These Decisions Unlock</h2>
+            <p>These seven binary decisions collectively determine whether Salesforce operates with <strong>structural visibility or structural blindness</strong> during the AI transition cycle and enterprise budget compression period ahead.</p>
+            <p><strong>Decisions 1, 3, 6, and 7</strong> address the <strong>financial resilience question</strong>: Can the organization quantify and model its capacity to sustain revenue deceleration, margin compression, and customer concentration risk? Without this visibility, survival capacity under adverse conditions is unknowable — gambling rather than managing risk.</p>
+            <p><strong>Decision 2</strong> addresses the <strong>competitive displacement question</strong>: Will the organization invest to defend differentiation against AI-native alternatives and workflow replication, or accept gradual commoditization and margin compression? This determines whether premium pricing is sustainable or price competition inevitable.</p>
+            <p><strong>Decision 4</strong> addresses the <strong>market position question</strong>: Does the organization operate with
+</body>
+</html>
